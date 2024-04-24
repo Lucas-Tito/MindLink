@@ -1,0 +1,103 @@
+@import url("https://fonts.googleapis.com/css2?family=Roboto:wght@400;700;900&display=swap");
+body {
+  font-family: "Roboto", sans-serif;
+}
+
+/* Estilos para o container principal */
+.container {
+  display: flex; /* Usar flexbox */
+  height: 100vh;
+}
+
+/* Estilos para o container do formulário */
+.form-container {
+  flex: 1; /* Ocupa todo o espaço disponível */
+  padding: 20px; /* Espaçamento interno */
+}
+
+/* Estilos para o container da imagem */
+.image-container {
+  flex: 1; /* Ocupa todo o espaço disponível */
+  background-color: #7a41f1;
+}
+
+/* Estilos para a imagem */
+.image-container img {
+  width: 100%; /* Imagem ocupa toda a largura do container */
+  height: auto; /* Altura ajustável para manter a proporção */
+}
+/* Estilos para o formulário */
+.form {
+  width: 300px; /* Largura do formulário */
+  margin-top: 100px; /* Centralizar o formulário na página */
+  margin-left: 150px;
+  padding: 20px; /* Espaçamento interno do formulário */
+  border-radius: 5px; /* Arredondamento das bordas do formulário */
+  align-items: center;
+}
+
+/* Estilos para os campos de entrada */
+.form input[type="text"],
+.form input[type="email"],
+.form input[type="password"] {
+  width: 80%; /* Largura total dos campos de entrada */
+  padding: 10px; /* Espaçamento interno dos campos de entrada */
+  margin-bottom: 20px; /* Espaçamento entre os campos de entrada */
+  margin-left: 20px;
+  border: 1px solid #ccc; /* Borda dos campos de entrada */
+  border-radius: 3px; /* Arredondamento das bordas dos campos de entrada */
+}
+
+/* Estilos para o botão de envio */
+.form .btn1 {
+  width: 90%; /* Largura total do botão de envio */
+  padding: 10px; /* Espaçamento interno do botão de envio */
+  background-color: #8f1ea8; /* Cor de fundo do botão de envio */
+  color: #fff; /* Cor do texto do botão de envio */
+  margin-left: 20px;
+  font-family: "Roboto";
+  border: none; /* Remover a borda do botão de envio */
+  border-radius: 3px; /* Arredondamento das bordas do botão de envio */
+  cursor: pointer; /* Alterar o cursor ao passar sobre o botão de envio */
+}
+
+/* Estilos para o botão de envio quando o cursor está sobre ele */
+.form input[type="submit"]:hover {
+  background-color: #0056b3; /* Cor de fundo alterada ao passar o cursor sobre o botão */
+}
+.input-container {
+  position: relative;
+  margin-bottom: 15px;
+}
+
+.input-icon {
+  position: absolute;
+  left: 250px; /* Ajuste conforme necessário */
+  top: 20px;
+  width: 25px;
+  transform: translateY(-50%);
+}
+
+.title {
+  display: flex; /* Usar flexbox para alinhar os itens horizontalmente */
+  align-items: center; /* Centralizar os itens verticalmente */
+  margin-bottom: 40px;
+}
+
+.title h2 {
+  margin-right: 5px; /* Adicionar espaço entre o texto e a imagem */
+  margin-left: 50px;
+  font-size: 40px;
+  font-family: "Roboto";
+  font-weight: 900;
+  text-align: center; /* Centralizar o texto horizontalmente */
+}
+
+.title .cerebro_icon {
+  width: 50px;
+  height: 50px;
+}
+.cerebro_icon {
+  width: 50px;
+  height: 50px;
+}
