@@ -40,25 +40,49 @@ body {
 .form input[type="text"],
 .form input[type="email"],
 .form input[type="password"] {
-  width: 80%; /* Largura total dos campos de entrada */
-  padding: 10px; /* Espaçamento interno dos campos de entrada */
-  margin-bottom: 20px; /* Espaçamento entre os campos de entrada */
-  margin-left: 20px;
-  border: 1px solid #ccc; /* Borda dos campos de entrada */
-  border-radius: 3px; /* Arredondamento das bordas dos campos de entrada */
-}
-
-/* Estilos para o botão de envio */
-.form .btn1 {
-  width: 90%; /* Largura total do botão de envio */
-  padding: 10px; /* Espaçamento interno do botão de envio */
-  background-color: #8f1ea8; /* Cor de fundo do botão de envio */
-  color: #fff; /* Cor do texto do botão de envio */
+  width: 80%;
+  padding: 10px;
+  margin-bottom: 10px;
   margin-left: 20px;
   font-family: "Roboto";
-  border: none; /* Remover a borda do botão de envio */
-  border-radius: 3px; /* Arredondamento das bordas do botão de envio */
-  cursor: pointer; /* Alterar o cursor ao passar sobre o botão de envio */
+  font-weight: 400;
+  border: none;
+  border-radius: 3px;
+  border-bottom: 1px solid #363636; /* Cor da borda inicial */
+  background-color: #f5f5f5;
+  transition: border-bottom-color 0.3s ease; /* Transição apenas para a cor da borda inferior */
+}
+
+.form input[type="text"]:focus,
+.form input[type="email"]:focus,
+.form input[type="password"]:focus {
+  outline: none; /* Remove a borda de foco padrão */
+  border-bottom-color: #007bff; /* Cor da borda inferior quando o campo ganha foco */
+}
+
+.form input[type="text"]::placeholder,
+.form input[type="email"]::placeholder,
+.form input[type="password"]::placeholder {
+  color: #999; /* Cor do texto do placeholder */
+}
+/* Estilos para o botão de envio */
+.form .btn1 {
+  width: 90%;
+  padding: 15px;
+  background-color: #b90ae0;
+  color: #fff;
+  margin-left: 20px;
+  font-family: "Roboto";
+  border: none;
+  border-radius: 3px;
+  cursor: pointer;
+  transition: background-color 0.3s ease; /* Adiciona uma transição para suavizar a mudança de cor */
+}
+
+.form .btn1:hover {
+  filter: brightness(
+    0.9
+  ); /* Cor de fundo alterada ao passar o mouse sobre o botão */
 }
 
 /* Estilos para o botão de envio quando o cursor está sobre ele */
@@ -67,15 +91,39 @@ body {
 }
 .input-container {
   position: relative;
-  margin-bottom: 15px;
 }
 
 .input-icon {
   position: absolute;
   left: 250px; /* Ajuste conforme necessário */
   top: 20px;
-  width: 25px;
+  width: 15px;
   transform: translateY(-50%);
+}
+.input-icon1 {
+  position: absolute;
+  left: 32.1%; /* Ajuste conforme necessário */
+  top: 60%;
+  width: 20px;
+  height: 30px;
+  transform: translateY(-50%);
+}
+.checkbox-container {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  margin-top: 5px;
+  margin-right: 17px;
+  margin-bottom: 5px;
+}
+
+.checkbox-label1 {
+  margin-left: 5px;
+  color: gray;
+}
+.checkbox-label2 {
+  margin-left: 5px;
+  color: black;
 }
 
 .title {
@@ -89,6 +137,7 @@ body {
   margin-left: 50px;
   font-size: 40px;
   font-family: "Roboto";
+  color: #354446;
   font-weight: 900;
   text-align: center; /* Centralizar o texto horizontalmente */
 }
