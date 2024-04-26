@@ -1,0 +1,42 @@
+/* Estilo da barra lateral */
+.sidebar {
+  width: 120px; /* Largura da barra lateral */
+  height: 100%; /* Altura total */
+  position: fixed; /* Fixa a barra lateral na posição */
+  top: 0;
+  left: 0;
+  background-color: #ffffff; /* Cor de fundo da barra lateral */
+  padding-top: 20px; /* Espaçamento superior */
+}
+/* Estilo da segunda barra lateral (direita) */
+.sidebar-right {
+  width: 270px;
+  height: 100%;
+  position: fixed;
+  top: 0;
+  left: 100px; /* Ajusta a posição para que fique ao lado da primeira sidebar */
+  background-color: #f3f3f3;
+  padding-top: 20px;
+}
+
+/* Estilo da lista de itens de menu */
+.sidebar ul {
+  list-style-type: none; /* Remove marcadores de lista */
+  padding: 0;
+}
+
+/* Estilo dos itens de menu */
+.sidebar ul li {
+  padding: 10px;
+}
+
+/* Estilo dos links dos itens de menu */
+.sidebar ul li a {
+  color: #fff; /* Cor do texto */
+  text-decoration: none; /* Remove sublinhado */
+}
+
+/* Estilo quando o link do item de menu é hover */
+.sidebar ul li a:hover {
+  background-color: #555; /* Cor de fundo quando hover */
+}
