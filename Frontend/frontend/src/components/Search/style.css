@@ -1,0 +1,19 @@
+.search-container {
+  position: relative;
+}
+
+.search-input {
+  padding: 12px;
+  font-size: 16px;
+  border: none;
+  font-family: "Roboto";
+  border-radius: 10px;
+  transition: all 0.3s ease;
+  width: 260px; /* ajuste conforme necessário */
+  background-color: #e6e3e3;
+}
+
+.search-input:focus {
+  border-color: #007bff;
+  box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+}

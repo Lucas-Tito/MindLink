@@ -4,7 +4,7 @@
   padding: 10px;
   background-color: #f3f3f3; /* Cor de fundo do card */
   border-radius: 30px;
-  width: 240px;
+  width: 270px;
 }
 
 .avatar {
@@ -21,9 +21,12 @@
 }
 
 .message {
-  padding: 3px;
+  padding: 5px;
   border-radius: 10px;
   margin-bottom: 5px;
+}
+.message span {
+  color: gray;
 }
 
 .details {
@@ -33,6 +36,11 @@
 
 .details p {
   margin: 0;
+}
+.details span {
+  color: gray;
+  font-family: "Roboto";
+  font-size: 15px;
 }
 
 .details p:first-child {

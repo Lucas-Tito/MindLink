@@ -5,18 +5,27 @@ import homeIcon from "../../assets/home.svg";
 import chatIcon from "../../assets/chatIcon.svg";
 import logoIcon from "../../assets/Logo.svg";
 import lupaIcon from "../../assets/lupaIcon.svg";
+import engineIcon from "../../assets/engine.svg";
+import cerebroIcon from "../../assets/cerebro.png";
 import calendarIcon from "../../assets/calendar.svg";
 import CardChat from "../CardChat";
+import SearchBar from "../Search";
+import ChatRoom from "../Chat";
 
 const Sidebar = () => {
   const [qtdMensagens, setQtdMensagens] = useState(12);
+  const handleSearch = (term) => {
+    // Aqui você pode fazer algo com o termo de busca, como enviar para um servidor
+    console.log("Termo de busca:", term);
+  };
+
   return (
     <div>
       <div class="sidebar">
         <ul>
           <li>
             <img
-              src={logoIcon}
+              src={cerebroIcon}
               style={{
                 width: "70px",
                 left: "20px",
@@ -58,27 +67,27 @@ const Sidebar = () => {
               }}
             />
           </li>
+
           <li>
             <img
-              src={calendarIcon}
+              src={engineIcon}
               style={{
                 width: "40px",
                 left: "30px",
                 position: "absolute",
-                top: "370px",
+                top: "830px",
               }}
             />
           </li>
         </ul>
       </div>
-
       <div class="sidebar sidebar-right">
         <div
           style={{
             display: "flex",
             alignItems: "center",
             justifyContent: "space-around",
-            borderBottom: "1px solid gray",
+            borderBottom: "1px solid #FFF",
           }}
         >
           <h2
@@ -94,7 +103,7 @@ const Sidebar = () => {
             style={{
               borderRadius: "100%",
               backgroundColor: "#c9c7c7",
-              padding: "5px",
+              padding: "7px",
             }}
           >
             {qtdMensagens}
@@ -102,18 +111,14 @@ const Sidebar = () => {
         </div>
         <ul>
           <li>
+            <SearchBar onSearch={handleSearch} />
+          </li>
+          <li>
             <CardChat />
-          </li>
-          <li>
-            <a href="#">Página B</a>
-          </li>
-          <li>
-            <a href="#">Página C</a>
           </li>
         </ul>
       </div>
-
-      <div class="content"></div>
+      <ChatRoom />S
     </div>
   );
 };

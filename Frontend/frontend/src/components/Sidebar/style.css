@@ -10,12 +10,12 @@
 }
 /* Estilo da segunda barra lateral (direita) */
 .sidebar-right {
-  width: 270px;
+  width: 320px;
   height: 100%;
   position: fixed;
   top: 0;
   left: 100px; /* Ajusta a posição para que fique ao lado da primeira sidebar */
-  background-color: #f3f3f3;
+  background-color: #f0f0f0;
   padding-top: 20px;
 }
 

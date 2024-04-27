@@ -12,10 +12,10 @@ const CardChat = () => {
         <div class="message-info">
           <div class="details">
             <p>{nome}</p>
-            <p>{horario}</p>
+            <span>{horario}</span>
           </div>
           <div class="message">
-            <p>nois da o cu porra 😛</p>
+            <span>nois da o cu porra </span>
           </div>
         </div>
       </div>
