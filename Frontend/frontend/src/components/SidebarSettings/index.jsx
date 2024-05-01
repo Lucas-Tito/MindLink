@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import "./style.css";
 import editIcon from "../../assets/editIcon.svg";
+import notificationIcon from "../../assets/notificationIcon.svg";
+import helpIcon from "../../assets/helpIcon.svg";
 
 const SidebarSettings = () => {
   const handleSearch = (term) => {
@@ -31,10 +33,24 @@ const SidebarSettings = () => {
           </h2>
         </div>
         <ul>
-          <img src={editIcon} className="img" />
-          <li>Edit profile</li>
-          <li>Notification</li>
-          <li>Help</li>
+          <div style={{ display: "flex" }}>
+            <img src={editIcon} className="img" />
+            <li style={{ fontSize: "20px", fontWeight: "bold" }}>
+              Edit profile
+            </li>
+          </div>
+          <div style={{ display: "flex" }}>
+            <img
+              src={notificationIcon}
+              style={{ fontSize: "20px" }}
+              className="img"
+            />
+            <li>Notification</li>
+          </div>
+          <div style={{ display: "flex" }}>
+            <img src={helpIcon} style={{ fontSize: "20px" }} className="img" />
+            <li>Help</li>
+          </div>
         </ul>
       </div>
     </div>

@@ -40,3 +40,6 @@
 .sidebar ul li a:hover {
   background-color: #555; /* Cor de fundo quando hover */
 }
+.img {
+  width: 30px;
+}

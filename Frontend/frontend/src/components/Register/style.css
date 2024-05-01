@@ -29,8 +29,8 @@ body {
 /* Estilos para o formulário */
 .form {
   width: 300px; /* Largura do formulário */
-  margin-top: 100px; /* Centralizar o formulário na página */
-  margin-left: 150px;
+  margin-top: 230px; /* Centralizar o formulário na página */
+  margin-left: 300px;
   padding: 20px; /* Espaçamento interno do formulário */
   border-radius: 5px; /* Arredondamento das bordas do formulário */
   align-items: center;
