@@ -7,7 +7,6 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background: rgb(246, 255, 255);
   min-height: 100vh;
   display: flex;
   flex-direction: column;
