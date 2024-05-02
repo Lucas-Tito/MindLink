@@ -1,4 +1,6 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+
 import "./style.css";
 import cerebro_icon from "../../assets/cerebro.png";
 import imagem_consulta from "../../assets/imagemConsulta.png";
@@ -8,24 +10,64 @@ import senhaIcon from "../../assets/senha.svg";
 
 export default function Register() {
   // Definindo os estados para os campos do formulário
-  const [nome, setNome] = useState("");
-  const [email, setEmail] = useState("");
-  const [senha, setSenha] = useState("");
   const [isChecked, setIsChecked] = useState(false);
 
   const handleCheckboxChange = () => {
     setIsChecked(!isChecked);
   };
 
-  // Função para lidar com o envio do formulário
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    // Aqui você pode adicionar a lógica para enviar os dados do formulário
-    console.log("Nome:", nome);
-    console.log("Email:", email);
-    console.log("Senha:", senha);
-  };
+  const [formData, setformData] = useState({
+    name: "",
+    email: "",
+    password: "",
+  });
 
+  function handleFormChange(event) {
+    //gets data from the input that triggered and event
+    const { name, value } = event.target;
+
+    //keeps the unchenged data and updates the one that changed
+    setformData((previousFormData) => {
+      return {
+        ...previousFormData,
+        [name]: value,
+      };
+    });
+  }
+
+  function handleSubmit(event) {
+    //cancel the default submit event that refreshes the browser
+    event.preventDefault();
+
+    //Todo* inputs null verification and verification if user already exists
+
+    fetch("http://localhost:3000/mindlink/users", {
+      method: "POST",
+      headers: {
+        //indicates that the body contais json data
+        "Content-type": "application/json",
+      },
+      //sends the data to the API process
+      body: JSON.stringify(formData),
+
+      //awaits the response from the API
+    })
+      .then((resp) => resp.json())
+      .then((data) => {
+        const msg = data.msg;
+        if (msg == "exists") {
+          alert("Usuário já existe!");
+        } else if (msg == "success") {
+          alert("Usuário registrado com sucesso!");
+        }
+      })
+      .catch((err) => console.log(err));
+    setformData({
+      name: "",
+      email: "",
+      password: "",
+    });
+  }
   return (
     <div class="container">
       <div class="form-container">
@@ -39,9 +81,9 @@ export default function Register() {
               <input
                 type="text"
                 placeholder="Nome"
-                id="nome"
-                value={nome}
-                onChange={(e) => setNome(e.target.value)}
+                name="name"
+                value={formData.name}
+                onChange={handleFormChange}
               />
             </div>
             <div class="input-container">
@@ -50,9 +92,9 @@ export default function Register() {
               <input
                 type="email"
                 placeholder="Email"
-                id="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                name="email"
+                value={formData.email}
+                onChange={handleFormChange}
               />
             </div>
             <div>
@@ -61,9 +103,9 @@ export default function Register() {
               <input
                 type="password"
                 placeholder="Senha"
-                id="senha"
-                value={senha}
-                onChange={(e) => setSenha(e.target.value)}
+                name="password"
+                value={formData.password}
+                onChange={handleFormChange}
               />
             </div>
             <div class="checkbox-container">

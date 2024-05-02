@@ -9,7 +9,7 @@ import CardPsycho from "./components/CardPsycho/CardPsycho";
 function App() {
   return (
     <div className="App">
-      <EditProfile />
+      <Register />
     </div>
   );
 }
