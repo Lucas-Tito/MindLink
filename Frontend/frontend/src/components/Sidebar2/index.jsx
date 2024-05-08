@@ -13,7 +13,7 @@ const Sidebar2 = () => {
   return (
     <div>
       {" "}
-      <div class="sidebar sidebar-right">
+      <div class="sidebar2 sidebar2-right">
         <div
           style={{
             display: "flex",

@@ -1,15 +1,14 @@
 /* Estilo da barra lateral */
-.sidebar {
+.sidebar2 {
   width: 120px; /* Largura da barra lateral */
   height: 100%; /* Altura total */
   position: fixed; /* Fixa a barra lateral na posição */
   top: 0;
   left: 0;
-  background-color: #ffffff; /* Cor de fundo da barra lateral */
   padding-top: 20px; /* Espaçamento superior */
 }
 /* Estilo da segunda barra lateral (direita) */
-.sidebar-right {
+.sidebar2-right {
   width: 320px;
   height: 100%;
   position: fixed;
@@ -20,13 +19,13 @@
 }
 
 /* Estilo da lista de itens de menu */
-.sidebar ul {
+.sidebar2 ul {
   list-style-type: none; /* Remove marcadores de lista */
   padding: 0;
 }
 
 /* Estilo dos itens de menu */
-.sidebar ul li {
+.sidebar2 ul li {
   padding: 10px;
 }
 

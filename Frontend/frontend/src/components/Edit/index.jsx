@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import Sidebar from "../Sidebar";
 import SidebarSettings from "../SidebarSettings";
+import lazin from "../../assets/lazin.png";
 
 import "./style.css";
 export const EditProfile = () => {
@@ -34,12 +35,26 @@ export const EditProfile = () => {
       <SidebarSettings />
 
       <div className="form1">
-        <h2>Preencha o formulário:</h2>
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "row",
+            justifyContent: "space-between",
+            padding: "20px",
+            width: "500px",
+          }}
+        >
+          <h2>Edit Profile</h2>
+          <img
+            src={lazin}
+            style={{ width: "60px", height: "60px", borderRadius: "100%" }}
+          />
+        </div>
         <form className="form-container1" onSubmit={handleSubmit}>
           <div className="form-group">
             <div style={{ display: "flex", gap: "217px" }}>
-              <label htmlFor="first_name">Primeiro Nome:</label>
-              <label htmlFor="last_name">Último Nome:</label>
+              <label htmlFor="first_name">Primeiro Nome</label>
+              <label htmlFor="last_name">Último Nome</label>
             </div>
 
             <div className="formdiv1">
@@ -63,7 +78,7 @@ export const EditProfile = () => {
           </div>
 
           <div className="form-group">
-            <label htmlFor="email">Email:</label>
+            <label htmlFor="email">Email</label>
             <input
               type="email"
               id="email"
@@ -74,7 +89,7 @@ export const EditProfile = () => {
           </div>
 
           <div className="form-group">
-            <label htmlFor="bio">Bio:</label>
+            <label htmlFor="bio">Bio</label>
             <textarea
               id="bio"
               name="bio"
@@ -84,7 +99,7 @@ export const EditProfile = () => {
           </div>
 
           <div className="form-group">
-            <label htmlFor="address">Endereço:</label>
+            <label htmlFor="address">Endereço</label>
             <input
               type="text"
               id="address"
@@ -95,7 +110,7 @@ export const EditProfile = () => {
           </div>
 
           <div className="form-group">
-            <label htmlFor="contact">Contato:</label>
+            <label htmlFor="contact">Contato</label>
             <input
               type="text"
               id="contact"
@@ -107,8 +122,8 @@ export const EditProfile = () => {
 
           <div className="form-group">
             <div style={{ display: "flex", gap: "300px" }}>
-              <label htmlFor="city">Cidade:</label>
-              <label htmlFor="state">Estado:</label>
+              <label htmlFor="city">Cidade</label>
+              <label htmlFor="state">Estado</label>
             </div>
             <div className="formdiv2">
               <input
@@ -132,8 +147,24 @@ export const EditProfile = () => {
             </div>
           </div>
 
-          <button type="submit" className="btn-submit">
-            Enviar
+          <button
+            type="submit"
+            className="btn-submit"
+            style={{ color: "white", background: "#615EF0" }}
+          >
+            Salvar
+          </button>
+          <button
+            type="submit"
+            className="btn-submit"
+            style={{
+              color: "#615EF0",
+              background: "white",
+              marginLeft: "10px",
+              border: "1px solid #615EF0",
+            }}
+          >
+            Cancelar
           </button>
         </form>
       </div>

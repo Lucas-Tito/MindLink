@@ -66,7 +66,7 @@ const Sidebar = () => {
                 width: "40px",
                 left: "30px",
                 position: "absolute",
-                top: "830px",
+                top: "630px",
               }}
             />
           </li>
