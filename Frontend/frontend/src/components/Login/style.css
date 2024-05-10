@@ -1,0 +1,152 @@
+@import url("https://fonts.googleapis.com/css2?family=Roboto:wght@400;700;900&display=swap");
+body {
+  font-family: "Roboto", sans-serif;
+}
+
+/* Estilos para o container principal */
+.container {
+  display: flex; /* Usar flexbox */
+  height: 100vh;
+}
+
+/* Estilos para o container do formulário */
+.form-container {
+  flex: 1; /* Ocupa todo o espaço disponível */
+  padding: 20px; /* Espaçamento interno */
+}
+
+/* Estilos para o container da imagem */
+.image-container {
+  flex: 1; /* Ocupa todo o espaço disponível */
+  background-color: #7a41f1;
+}
+
+/* Estilos para a imagem */
+.image-container img {
+  width: 100%; /* Imagem ocupa toda a largura do container */
+  height: auto; /* Altura ajustável para manter a proporção */
+}
+/* Estilos para o formulário */
+.form {
+  width: 300px; /* Largura do formulário */
+  margin-top: 103px; /* Centralizar o formulário na página */
+  margin-left: 150px;
+  padding: 20px; /* Espaçamento interno do formulário */
+  border-radius: 5px; /* Arredondamento das bordas do formulário */
+  align-items: center;
+}
+
+/* Estilos para os campos de entrada */
+.form input[type="text"],
+.form input[type="email"],
+.form input[type="password"] {
+  width: 80%;
+  padding: 10px;
+  margin-bottom: 10px;
+  margin-left: 20px;
+  font-family: "Roboto";
+  font-weight: 400;
+  border: none;
+  border-radius: 3px;
+  border-bottom: 1px solid #363636; /* Cor da borda inicial */
+  background-color: #f5f5f5;
+  transition: border-bottom-color 0.3s ease; /* Transição apenas para a cor da borda inferior */
+}
+
+.form input[type="text"]:focus,
+.form input[type="email"]:focus,
+.form input[type="password"]:focus {
+  outline: none; /* Remove a borda de foco padrão */
+  border-bottom-color: #007bff; /* Cor da borda inferior quando o campo ganha foco */
+}
+
+.form input[type="text"]::placeholder,
+.form input[type="email"]::placeholder,
+.form input[type="password"]::placeholder {
+  color: #999; /* Cor do texto do placeholder */
+}
+/* Estilos para o botão de envio */
+.form .btn1 {
+  width: 90%;
+  padding: 15px;
+  background-color: #8f1ea8;
+  color: #fff;
+  margin-left: 20px;
+  font-family: "Roboto";
+  border: none;
+  border-radius: 3px;
+  cursor: pointer;
+  transition: background-color 0.3s ease; /* Adiciona uma transição para suavizar a mudança de cor */
+}
+
+.form .btn1:hover {
+  filter: brightness(
+    0.9
+  ); /* Cor de fundo alterada ao passar o mouse sobre o botão */
+}
+
+/* Estilos para o botão de envio quando o cursor está sobre ele */
+.form input[type="submit"]:hover {
+  background-color: #0056b3; /* Cor de fundo alterada ao passar o cursor sobre o botão */
+}
+.input-container {
+  position: relative;
+}
+
+.input-icon {
+  position: absolute;
+  left: 250px; /* Ajuste conforme necessário */
+  top: 20px;
+  width: 15px;
+  transform: translateY(-50%);
+}
+.input-icon2 {
+  position: absolute;
+  left: 32.1%; /* Ajuste conforme necessário */
+  top: 53%;
+  width: 20px;
+  height: 30px;
+  transform: translateY(-50%);
+}
+.checkbox-container {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  margin-top: 5px;
+  margin-right: 17px;
+  margin-bottom: 5px;
+}
+
+.checkbox-label1 {
+  margin-left: 5px;
+  color: gray;
+}
+.checkbox-label2 {
+  margin-left: 5px;
+  color: black;
+}
+
+.title {
+  display: flex; /* Usar flexbox para alinhar os itens horizontalmente */
+  align-items: center; /* Centralizar os itens verticalmente */
+  margin-bottom: 40px;
+}
+
+.title h2 {
+  margin-right: 5px; /* Adicionar espaço entre o texto e a imagem */
+  margin-left: 50px;
+  font-size: 40px;
+  font-family: "Roboto";
+  color: #354446;
+  font-weight: 900;
+  text-align: center; /* Centralizar o texto horizontalmente */
+}
+
+.title .cerebro_icon {
+  width: 50px;
+  height: 50px;
+}
+.cerebro_icon {
+  width: 50px;
+  height: 50px;
+}
