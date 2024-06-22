@@ -85,6 +85,10 @@ table tbody tr td.hour span {
   width: 90px;
 }
 
+table tbody tr td.session_active {
+  background-color: black;
+  color: white;
+}
 
 
 

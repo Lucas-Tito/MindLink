@@ -20,18 +20,88 @@ export default function Calendar() {
                  * so it's necessary to also go back three rows.
                  */
                 let hour = parseInt(session.date.hour.split(":")[0])
-                let targetRow = document.querySelector("tr")[(hour-7)*4]
+                let targetRow = [
+                    document.querySelectorAll("tr")[(hour-7)*4],
+                    document.querySelectorAll("tr")[((hour-7)*4)-1],
+                    document.querySelectorAll("tr")[((hour-7)*4)-2],
+                    document.querySelectorAll("tr")[((hour-7)*4)-3]
+                ]
 
-                console.log("oi"+(hour-7)*4);
-                console.log(targetRow);
-                
+                // console.log("oi"+(hour-7)*4);
+                // console.log(targetRow);
+
+                //verifies if targetRow isn't null
                 if(targetRow){
-                    targetRow.style.color= "black";
+                    let targetRowCells = [
+                        targetRow[0].querySelectorAll("td"),
+                        targetRow[1].querySelectorAll("td"),
+                        targetRow[2].querySelectorAll("td"),
+                        targetRow[3].querySelectorAll("td")
+                    ]
+                    let targetCellIndex = [0, 0, 0, 0]
+                    
+                    // console.log("targetRowCells");
+                    // console.log(targetRowCells);
+
+                    /**
+                     * if there is 8 cells, it means that one of them bellongs to the hour,
+                     * so the following code ignores the hour cell
+                     */
+
+                    for (let i = 0; i < targetRowCells.length; i++) {
+                        if(targetRowCells[i].length == 8){
+                            targetCellIndex[i]=1
+                        }
+                    }
+
+                    //gets a index from 0-6 in which 0 is sunday
+                    let dayOfWeek = new Date(`${session.date.year}-${session.date.month}-${session.date.day}`).getDay()
+
+
+
+                    /**
+                     * The following calculation does a convertion of the day of week to the cell index,
+                     * this is necessary because the day of week index starts at sunday, and the tds start at monday  
+                     */
+                    let targetCell = [
+                        targetRowCells[0][targetCellIndex[0]+(dayOfWeek-1)],
+                        targetRowCells[1][targetCellIndex[1]+(dayOfWeek-1)],
+                        targetRowCells[2][targetCellIndex[2]+(dayOfWeek-1)],
+                        targetRowCells[3][targetCellIndex[3]+(dayOfWeek-1)]
+                    ]
+
+                    if (targetCell) {
+                        if(!targetCell[0].querySelector("button")){
+                            let button = document.createElement("button")
+                            button.textContent = "Butaum"
+                            button.addEventListener("click", function() {
+                                alert("Butaum was clicked!");
+                            });
+
+                            targetCell[0].appendChild(button)
+                        }
+ 
+
+                        targetCell[0].classList.add("session_active")
+                        
+                        targetCell[1].classList.add("session_active")
+
+                        targetCell[2].classList.add("session_active")
+                        targetCell[2].textContent = hour
+
+                        targetCell[3].classList.add("session_active")
+                        targetCell[3].textContent = session.patient
+                    }
+
+                    /**
+                     * Since we only finished the last row of the card,
+                     * now it's necessary to go back three rows to finish the card
+                     */
                 }
             });   
         }
         
-    })
+    }, [])
 
     return (
         <div className="table_container">
