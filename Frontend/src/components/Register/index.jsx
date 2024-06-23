@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import firebase from "firebase/compat/app";
+import "firebase/auth";
 
 import "./style.css";
 import cerebro_icon from "../../assets/cerebro.png";
@@ -9,68 +11,49 @@ import ajudaIcon from "../../assets/ajuda.png";
 import senhaIcon from "../../assets/senha.svg";
 
 export default function Register() {
-  // Definindo os estados para os campos do formulário
   const [isChecked, setIsChecked] = useState(false);
-
-  const handleCheckboxChange = () => {
-    setIsChecked(!isChecked);
-  };
-
   const [formData, setformData] = useState({
     name: "",
     email: "",
     password: "",
   });
 
-  function handleFormChange(event) {
-    //gets data from the input that triggered and event
+  const handleCheckboxChange = () => {
+    setIsChecked(!isChecked);
+  };
+
+  const handleFormChange = (event) => {
     const { name, value } = event.target;
+    setformData((previousFormData) => ({
+      ...previousFormData,
+      [name]: value,
+    }));
+  };
 
-    //keeps the unchenged data and updates the one that changed
-    setformData((previousFormData) => {
-      return {
-        ...previousFormData,
-        [name]: value,
-      };
-    });
-  }
+  const handleFirebaseSignUp = async () => {
+    const { email, password } = formData;
+    try {
+      await firebase.auth().createUserWithEmailAndPassword(email, password);
+      alert("Usuário cadastrado com sucesso!");
+      setformData({
+        name: "",
+        email: "",
+        password: "",
+      });
+    } catch (error) {
+      console.error("Erro ao cadastrar usuário:", error);
+      alert("Erro ao cadastrar usuário. Por favor, tente novamente.");
+    }
+  };
 
-  function handleSubmit(event) {
-    //cancel the default submit event that refreshes the browser
+  const handleSubmit = (event) => {
     event.preventDefault();
+    handleFirebaseSignUp();
+  };
 
-    //Todo* inputs null verification and verification if user already exists
-
-    fetch("http://localhost:3000/mindlink/users", {
-      method: "POST",
-      headers: {
-        //indicates that the body contais json data
-        "Content-type": "application/json",
-      },
-      //sends the data to the API process
-      body: JSON.stringify(formData),
-
-      //awaits the response from the API
-    })
-      .then((resp) => resp.json())
-      .then((data) => {
-        const msg = data.msg;
-        if (msg == "exists") {
-          alert("Usuário já existe!");
-        } else if (msg == "success") {
-          alert("Usuário registrado com sucesso!");
-        }
-      })
-      .catch((err) => console.log(err));
-    setformData({
-      name: "",
-      email: "",
-      password: "",
-    });
-  }
   return (
-    <div class="container">
-      <div class="form-container">
+    <div className="container">
+      <div className="form-container">
         <div className="form">
           <div className="title">
             <h2>MindLink</h2>
@@ -86,9 +69,12 @@ export default function Register() {
                 onChange={handleFormChange}
               />
             </div>
-            <div class="input-container">
-              <img src={personIcon} alt="Ícone de Email" class="input-icon" />
-
+            <div className="input-container">
+              <img
+                src={personIcon}
+                alt="Ícone de Email"
+                className="input-icon"
+              />
               <input
                 type="email"
                 placeholder="Email"
@@ -98,8 +84,7 @@ export default function Register() {
               />
             </div>
             <div>
-              <img src={senhaIcon} class="input-icon1" />
-
+              <img src={senhaIcon} className="input-icon1" />
               <input
                 type="password"
                 placeholder="Senha"
@@ -108,7 +93,7 @@ export default function Register() {
                 onChange={handleFormChange}
               />
             </div>
-            <div class="checkbox-container">
+            <div className="checkbox-container">
               <input
                 type="checkbox"
                 checked={isChecked}
@@ -126,7 +111,7 @@ export default function Register() {
           </form>
         </div>
       </div>
-      <div class="image-container">
+      <div className="image-container">
         <img src={imagem_consulta} alt="Imagem" />
       </div>
       <div
@@ -151,6 +136,7 @@ export default function Register() {
           height: "50px",
         }}
         src={ajudaIcon}
+        alt="Ícone de Ajuda"
       />
     </div>
   );

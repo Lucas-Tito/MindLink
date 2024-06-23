@@ -5,101 +5,53 @@ import imagem_consulta from "../../assets/imagemConsulta.png";
 import personIcon from "../../assets/personIcon.svg";
 import ajudaIcon from "../../assets/ajuda.png";
 import senhaIcon from "../../assets/senha.svg";
-//TU PRECISA DO ID PRA COLOCAR NO CAMPO DO OBJETO MENSAGEM E IDETIFICAR O CABRA
-//FAZER UM DOS CODIGOS DE CHAT (AGORA SEM O AUTH DO GOOGLE)
-//A IDEIA É PEGAR O ID DO PSICOLOGO E CRIAR A ROOM COM ESSE ID
-//AINDA NÃO SEI COMO FAZER VARIOS CHATS INTEGRANDO O SIDEBAR
-export const Login = () => {
-  const [formData, setformData] = useState({
-    email: "",
-    password: "",
-  });
 
-  function handleFormChange(event) {
-    //gets data from the input that triggered and event
-    const { name, value } = event.target;
+const Login = ({ signInWithEmailAndPassword }) => {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
-    //keeps the unchenged data and updates the one that changed
-    setformData((previousFormData) => {
-      return {
-        ...previousFormData,
-        [name]: value,
-      };
-    });
-  }
+  const handleSignIn = async () => {
+    try {
+      await signInWithEmailAndPassword(email, password);
+    } catch (error) {
+      console.error("Error signing in with email and password:", error);
+    }
+  };
 
-  function handleSubmit(event) {
-    //cancel the default submit event that refreshes the browser
-    event.preventDefault();
-
-    //Todo* inputs null verification and verification if user already exists
-
-    fetch("http://localhost:3000/mindlink/users/login", {
-      method: "POST",
-      headers: {
-        //indicates that the body contais json data
-        "Content-type": "application/json",
-      },
-      //sends the data to the API process
-      body: JSON.stringify(formData),
-
-      //awaits the response from the API
-    })
-      .then((resp) => resp.json())
-      .then((data) => {
-        console.log(data.id);
-        const msg = data.msg;
-        if (msg == "exists") {
-          alert("Usuário já existe!");
-        } else if (msg == "success") {
-          alert("Usuário registrado com sucesso!");
-        }
-      })
-      .catch((err) => console.log(err));
-    setformData({
-      email: "",
-      password: "",
-    });
-  }
   return (
-    <div class="container">
-      <div class="form-container">
+    <div className="container">
+      <div className="form-container">
         <div className="form">
           <div className="title">
             <h2>MindLink</h2>
             <img src={cerebro_icon} alt="logo" className="cerebro_icon" />
           </div>
-          <form onSubmit={handleSubmit}>
-            <div class="input-container">
-              <img src={personIcon} alt="Ícone de Email" class="input-icon" />
-
-              <input
-                type="email"
-                placeholder="Email"
-                name="email"
-                value={formData.email}
-                onChange={handleFormChange}
-              />
-            </div>
-            <div>
-              <img src={senhaIcon} class="input-icon2" />
-
-              <input
-                type="password"
-                placeholder="Senha"
-                name="password"
-                value={formData.password}
-                onChange={handleFormChange}
-              />
-            </div>
-
-            <button type="submit" className="btn1">
-              ENTRAR
-            </button>
-          </form>
+          <div className="input-container">
+            <img src={personIcon} alt="Ícone de Email" className="input-icon" />
+            <input
+              type="email"
+              placeholder="Email"
+              name="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+            />
+          </div>
+          <div>
+            <img src={senhaIcon} className="input-icon2" />
+            <input
+              type="password"
+              placeholder="Senha"
+              name="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            />
+          </div>
+          <button type="button" className="btn1" onClick={handleSignIn}>
+            ENTRAR
+          </button>
         </div>
       </div>
-      <div class="image-container">
+      <div className="image-container">
         <img src={imagem_consulta} alt="Imagem" />
       </div>
       <div
@@ -124,7 +76,10 @@ export const Login = () => {
           height: "50px",
         }}
         src={ajudaIcon}
+        alt="Ícone de Ajuda"
       />
     </div>
   );
 };
+
+export default Login;
