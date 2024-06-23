@@ -2,6 +2,10 @@ import React, { useEffect } from "react"
 import "./calendar.css"
 import mock_array from "./mock_array"
 import currentWeekDays from "./current_week_days"
+import convertHourFormat from "./convertHourFormat"
+import arrow_left_icon from "../../assets/arrow_left.svg"
+import arrow_right_icon from "../../assets/arrow_right.svg"
+import getCurrentMonth from "./getCurrentMonth"
 
 export default function Calendar() {
 
@@ -24,15 +28,19 @@ export default function Calendar() {
                 table_headers[7].querySelector("span"),
             ]
 
-            const today = new Date().getDate();
+            const today = new Date()
             for (let i = 0; i < headers_spans.length; i++) {
                 headers_spans[i].textContent = currentWeekDays[i]
-                if(today == headers_spans[i].textContent){
+                if(today.getDate() == headers_spans[i].textContent){
                     // console.log("got in");
-                    headers_spans[i].classList.add("active")
+                    table_headers[i+1].classList.add("active")
                 }
                 // console.log("today="+today+" header="+headers_spans[i].textContent);
             }
+
+            let weekSelectorSpan = document.querySelector('.week_selector_span')
+            weekSelectorSpan.textContent = `${getCurrentMonth} ${currentWeekDays[0]}
+             - ${currentWeekDays[6]}, ${today.getFullYear()}`
         }
     }, [])
 
@@ -105,7 +113,7 @@ export default function Calendar() {
                     if (targetCell) {
                         if(!targetCell[0].querySelector("button")){
                             let button = document.createElement("button")
-                            button.textContent = "Butaum"
+                            button.textContent = "Button"
                             button.addEventListener("click", function() {
                                 alert("Butaum was clicked!");
                             });
@@ -119,7 +127,7 @@ export default function Calendar() {
                         targetCell[1].classList.add("session_active")
 
                         targetCell[2].classList.add("session_active")
-                        targetCell[2].textContent = hour
+                        targetCell[2].textContent = convertHourFormat(session.date.hour)
 
                         targetCell[3].classList.add("session_active")
                         targetCell[3].textContent = session.patient
@@ -137,6 +145,12 @@ export default function Calendar() {
 
     return (
         <div className="table_container">
+            <div className="week_selector">
+                <button><img src={arrow_left_icon}/></button>
+                <span className="week_selector_span"></span>
+                <button><img src={arrow_right_icon}/></button>
+            </div>
+
             <table id="appointments_table">
                 <thead>
 
@@ -184,16 +198,7 @@ export default function Calendar() {
                 <tbody>
                     <tr>
                         <td className="hour" rowSpan="4"><span>7 AM</span></td>
-                        <td style={{ backgroundColor: 'black', color: 'white' }}>Lázaro da Silva</td>
                         <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <td style={{ backgroundColor: 'black', color: 'white' }}>12:00 PM</td>
                         <td></td>
                         <td></td>
                         <td></td>
@@ -202,7 +207,7 @@ export default function Calendar() {
                         <td></td>
                     </tr>
                     <tr>
-                        <td style={{ backgroundColor: 'black', color: 'white' }}></td>
+                        <td></td>
                         <td></td>
                         <td></td>
                         <td></td>
@@ -211,7 +216,16 @@ export default function Calendar() {
                         <td></td>
                     </tr>
                     <tr>
-                        <td style={{ backgroundColor: 'black', color: 'white' }}>Button</td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td></td>
                         <td></td>
                         <td></td>
                         <td></td>

@@ -1,8 +1,14 @@
 .table_container{
-  max-height: 500px;
+  margin-top: 50px;
+  margin-left: 50px;
+  max-height: 800px;
   width: 1000px; 
   overflow-y: auto;
   border: 1px solid #ccc;
+  box-shadow: rgba(0, 0, 0, 0.1) 0px 20px 25px -5px, rgba(0, 0, 0, 0.04) 0px 10px 10px -5px;
+  padding: 10px;
+  padding-right: 30px;
+  border-radius: 30px;
 }
 
 table {
@@ -36,10 +42,14 @@ table thead tr th span.day {
   line-height: 1.8;
 }
 
-table thead tr th span.day.active {
+table thead tr th.active span.day {
   width: fit-content;
   padding: 0 12px;
   background: #d1d5db;
+  color: #626E7E;
+}
+
+table thead tr th.active span.long {
   color: #626E7E;
 }
 
@@ -59,11 +69,15 @@ table tbody tr:nth-child(4n+0) td {
 table tbody tr td {
   text-align: center;
   vertical-align: middle;
-  border-left: 1px solid #626E7E;
   position: relative;
   height: 35px;
-  cursor: pointer;
 }
+
+/* ignores not only the first td, but also the first td after the td hour */
+table tbody tr td:not(:first-child):not(.hour + td) {
+  border-left: 1px solid #626E7E;
+}
+
 table tbody tr td:last-child {
   border-right: 1px solid #626E7E;
 }
@@ -75,19 +89,27 @@ table tbody tr td:last-child {
 
 table tbody tr td.hour span {
   display: block;
+  font-size: 0.8em;
+  transform: translateY(16px) rotate(270deg);
+  -webkit-transform: translateY(16px) rotate(270deg);
+  -moz-transform: translateY(16px) rotate(270deg);
 }
-
-table tbody tr td.hour span {
-  display: block;
-}
-
 .hour {
-  width: 90px;
+  width: 34px;
+  border-right: 1px solid #626E7E;
 }
 
 table tbody tr td.session_active {
   background-color: black;
   color: white;
+}
+
+table tbody tr td.session_active button{
+  background-color: white;
+  border: none;
+  border-radius: 7px;
+  padding: 5px 20px;
+  cursor: pointer;
 }
 
 
@@ -105,6 +127,38 @@ table tbody tr td.session_active {
     -moz-transform: rotate(270deg);
   }
 }
+
+.table_container .week_selector button img{
+  width: 13px;
+} 
+
+.table_container .week_selector button{
+  border: none;
+  background-color: white;
+  border-radius: 30px;
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 2px 5px;
+  padding: 10px;
+} 
+
+.table_container .week_selector{
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 15px;
+} 
+
+.table_container .week_selector span{
+  font-weight: bold;
+color: #6B7A99;
+}
+
+
+
+
+
+
+
 @media (max-width: 27em) {
   table thead tr th {
     font-size: 65%;
