@@ -1,8 +1,40 @@
 import React, { useEffect } from "react"
 import "./calendar.css"
 import mock_array from "./mock_array"
+import currentWeekDays from "./current_week_days"
 
 export default function Calendar() {
+
+    useEffect(() => {
+        const tabela = document.querySelector("#appointments_table")
+        if (tabela) {   
+            let table_headers = document.querySelectorAll("th")
+    
+            /**
+             * the first one is th for hours, so it should be skipped,
+             * also inside each th there us three spans, of which the first is the day.
+             */
+            let headers_spans = [
+                table_headers[1].querySelector("span"),
+                table_headers[2].querySelector("span"),
+                table_headers[3].querySelector("span"),
+                table_headers[4].querySelector("span"),
+                table_headers[5].querySelector("span"),
+                table_headers[6].querySelector("span"),
+                table_headers[7].querySelector("span"),
+            ]
+
+            const today = new Date().getDate();
+            for (let i = 0; i < headers_spans.length; i++) {
+                headers_spans[i].textContent = currentWeekDays[i]
+                if(today == headers_spans[i].textContent){
+                    // console.log("got in");
+                    headers_spans[i].classList.add("active")
+                }
+                // console.log("today="+today+" header="+headers_spans[i].textContent);
+            }
+        }
+    }, [])
 
     /**
      * For a better understanding of the following code I will hereby present an example:
@@ -132,7 +164,7 @@ export default function Calendar() {
                             <span className="short">Qui</span>
                         </th>
                         <th>
-                            <span className="day active">5</span>
+                            <span className="day">5</span>
                             <span className="long">Sexta</span>
                             <span className="short">Sex</span>
                         </th>
