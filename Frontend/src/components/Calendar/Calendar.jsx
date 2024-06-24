@@ -1,11 +1,11 @@
 import React, { useEffect } from "react"
 import "./calendar.css"
 import mock_array from "./mock_array"
-import currentWeekDays from "./current_week_days"
-import convertHourFormat from "./convertHourFormat"
+import currentWeekDays from "./utils/current_week_days"
+import convertHourFormat from "./utils/convertHourFormat"
 import arrow_left_icon from "../../assets/arrow_left.svg"
 import arrow_right_icon from "../../assets/arrow_right.svg"
-import getCurrentMonth from "./getCurrentMonth"
+import getCurrentMonth from "./utils/getCurrentMonth"
 
 export default function Calendar() {
 
@@ -30,7 +30,9 @@ export default function Calendar() {
 
             const today = new Date()
             for (let i = 0; i < headers_spans.length; i++) {
+
                 headers_spans[i].textContent = currentWeekDays[i]
+                
                 if(today.getDate() == headers_spans[i].textContent){
                     // console.log("got in");
                     table_headers[i+1].classList.add("active")
