@@ -34,6 +34,7 @@ const userController = {
             email: request.body.email,
             name: request.body.name,
             password: request.body.password,
+            professionalType: request.body.professionalType
           };
 
         try {

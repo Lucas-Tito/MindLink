@@ -9,6 +9,7 @@ import imagem_consulta from "../../assets/imagemConsulta.png";
 import personIcon from "../../assets/personIcon.svg";
 import ajudaIcon from "../../assets/ajuda.png";
 import senhaIcon from "../../assets/senha.svg";
+import { useEffect } from "react";
 
 export default function Register() {
   const [isChecked, setIsChecked] = useState(false);
@@ -16,10 +17,16 @@ export default function Register() {
     name: "",
     email: "",
     password: "",
+    professionalType: ""
   });
 
-  const handleCheckboxChange = () => {
-    setIsChecked(!isChecked);
+  const handleCheckboxChange = (event) => {
+    const { name, checked } = event.target;
+    setIsChecked(checked);
+    setformData((previousFormData) => ({
+      ...previousFormData,
+      [name]: checked ,
+    }));
   };
 
   const handleFormChange = (event) => {
@@ -29,7 +36,6 @@ export default function Register() {
       [name]: value,
     }));
   };
-
   const handleFirebaseSignUp = async () => {
     const { email, password } = formData;
     try {
@@ -39,17 +45,45 @@ export default function Register() {
         name: "",
         email: "",
         password: "",
+        professionalType: ""
       });
+
+      registerUser();
     } catch (error) {
       console.error("Erro ao cadastrar usuário:", error);
       alert("Erro ao cadastrar usuário. Por favor, tente novamente.");
     }
+
   };
 
   const handleSubmit = (event) => {
     event.preventDefault();
     handleFirebaseSignUp();
   };
+
+  const registerUser = () => {
+    fetch("http://localhost:3000/mindlink/users", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(formData),
+    })
+    .then(response => response.json())
+    .then(data => {
+      // Lida com a resposta
+      console.log('Success:', data);
+    })
+    .catch((error) => {
+      // Lida com o erro
+      console.error('Error:', error);
+    });
+  };
+
+  /*useEffect(() => {
+    registerUser();
+  },[]); // Array de dependências vazio para garantir que o efeito seja executado apenas uma vez*/
+
 
   return (
     <div className="container">
@@ -97,6 +131,8 @@ export default function Register() {
               <input
                 type="checkbox"
                 checked={isChecked}
+                name="professionalType"
+                value={formData.professionalType}
                 onChange={handleCheckboxChange}
               />
               <label
