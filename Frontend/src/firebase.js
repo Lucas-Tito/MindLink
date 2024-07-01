@@ -2,6 +2,7 @@ import firebase from "firebase/compat/app";
 import "firebase/compat/firestore";
 import "firebase/compat/auth";
 import "firebase/compat/analytics";
+import "firebase/compat/storage";
 
 const firebaseConfig = {
   apiKey: "AIzaSyBuGjSiot4z5ZMIQFJhGCUrt2rjYXuVlo8",
@@ -19,5 +20,6 @@ const app = !firebase.apps.length
 const auth = app.auth();
 const firestore = app.firestore();
 const analytics = app.analytics();
+const storage = firebase.storage();
 
-export { auth, firestore, analytics };
+export { auth, firestore, analytics, storage };

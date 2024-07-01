@@ -39,3 +39,21 @@
 .sidebar ul li a:hover {
   background-color: #555; /* Cor de fundo quando hover */
 }
+.sidebar2-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  border-bottom: 1px solid #fff;
+}
+
+.sidebar2-header h2 {
+  margin-left: 10px;
+  font-family: Roboto;
+  font-weight: bold;
+}
+
+.message-count {
+  border-radius: 100%;
+  background-color: #c9c7c7;
+  padding: 7px;
+}

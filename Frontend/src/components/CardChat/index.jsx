@@ -1,22 +1,21 @@
-import React, { useState } from "react";
+import React from "react";
 import "./style.css";
-import lazin from "../../assets/lazin.png";
 
-const CardChat = () => {
-  const [nome, setNome] = useState("Lazin de paula");
-  const [horario, setHorario] = useState("14:30");
+const CardChat = ({ nome, photoURL }) => {
   return (
-    <div>
-      <div class="whatsapp-card">
-        <img src={lazin} alt="Foto da pessoa" class="avatar" />
-        <div class="message-info">
-          <div class="details">
-            <p>{nome}</p>
-            <span>{horario}</span>
-          </div>
-          <div class="message">
-            <span>nois da o cu porra </span>
-          </div>
+    <div className="whatsapp-card">
+      {photoURL ? (
+        <img src={photoURL} alt="Foto da pessoa" className="avatar" />
+      ) : (
+        <div className="default-avatar">Avatar padrão</div>
+      )}
+      <div className="message-info">
+        <div className="details">
+          <p>{nome}</p>
+          <span>14:30</span>
+        </div>
+        <div className="message">
+          <span>amongus</span>
         </div>
       </div>
     </div>
