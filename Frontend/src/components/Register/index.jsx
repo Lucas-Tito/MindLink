@@ -1,7 +1,7 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
 import firebase from "firebase/compat/app";
-import "firebase/auth";
+import "firebase/compat/auth";
+import "firebase/compat/firestore";
 import { storage } from "../../firebase";
 
 import "./style.css";
@@ -11,50 +11,51 @@ import personIcon from "../../assets/personIcon.svg";
 import ajudaIcon from "../../assets/ajuda.png";
 import senhaIcon from "../../assets/senha.svg";
 
-export default function Register() {
+const Register = () => {
   const [isChecked, setIsChecked] = useState(false);
   const [formData, setFormData] = useState({
     name: "",
     email: "",
     password: "",
     professionalType: false,
-    photoURL: null, // Adiciona o estado para armazenar a URL da foto
+    photoURL: null, // Armazena o objeto File da foto selecionada pelo usuário
   });
-
-  //const navigate = useNavigate();
 
   const handleCheckboxChange = (event) => {
     const { name, checked } = event.target;
     setIsChecked(checked);
-    setFormData((previousFormData) => ({
-      ...previousFormData,
+    setFormData((prevFormData) => ({
+      ...prevFormData,
       [name]: checked,
     }));
   };
 
   const handleFormChange = (event) => {
     const { name, value } = event.target;
-    setFormData((previousFormData) => ({
-      ...previousFormData,
+    setFormData((prevFormData) => ({
+      ...prevFormData,
       [name]: value,
     }));
   };
 
   const handleFileChange = (event) => {
     const file = event.target.files[0];
-    setFormData((previousFormData) => ({
-      ...previousFormData,
-      photoURL: file,
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      photoURL: file, // Armazena o objeto File da foto selecionada pelo usuário
     }));
   };
 
   const handleFirebaseSignUp = async () => {
     const { email, password, photoURL } = formData;
+
     try {
-      // Realiza o cadastro do usuário com email e senha
+      // Cria o usuário no Firebase Authentication
       const userCredential = await firebase
         .auth()
         .createUserWithEmailAndPassword(email, password);
+
+      // Obtém o usuário atual
       const user = userCredential.user;
 
       // Verifica se há uma foto para fazer upload
@@ -69,21 +70,30 @@ export default function Register() {
         // Obtém a URL de download da foto
         const downloadURL = await fileRef.getDownloadURL();
 
-        // Atualiza formData com a URL de download
-        const updatedFormData = {
-          ...formData,
+        // Atualiza o perfil do usuário no Firebase Authentication com a foto
+        await user.updateProfile({
           photoURL: downloadURL,
-        };
+        });
 
-        setFormData(updatedFormData); // Atualiza o estado local com a URL de download
-
-        // Agora, formData contém a photoURL atualizada
-
-        // Após atualizar o estado, chame registerUser() com o formData atualizado
-        registerUser(updatedFormData);
+        // Cria um documento correspondente no Firestore
+        await firebase.firestore().collection("Users").doc(user.uid).set({
+          uid: user.uid,
+          name: formData.name,
+          email: formData.email,
+          password: formData.password,
+          professionalType: formData.professionalType,
+          photoURL: downloadURL, // Armazena a URL de download da foto no Firestore
+        });
       } else {
-        // Se não houver foto, apenas chame registerUser() com formData atual
-        registerUser(formData);
+        // Se não houver foto, apenas cria o documento no Firestore sem a URL de foto
+        await firebase.firestore().collection("Users").doc(user.uid).set({
+          uid: user.uid,
+          name: formData.name,
+          email: formData.email,
+          password: formData.password,
+          professionalType: formData.professionalType,
+          // Outros campos necessários
+        });
       }
 
       alert("Usuário cadastrado com sucesso!");
@@ -93,7 +103,7 @@ export default function Register() {
         name: "",
         email: "",
         password: "",
-        professionalType: "",
+        professionalType: false,
         photoURL: null,
       });
     } catch (error) {
@@ -101,31 +111,14 @@ export default function Register() {
       alert("Erro ao cadastrar usuário. Por favor, tente novamente.");
     }
   };
+
   const handleSubmit = (event) => {
     event.preventDefault();
     handleFirebaseSignUp();
   };
 
-  const registerUser = (formData) => {
-    fetch("http://localhost:3000/mindlink/users", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(formData),
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        // Lida com a resposta do backend
-        console.log("Success:", data);
-      })
-      .catch((error) => {
-        // Lida com o erro do backend
-        console.error("Error:", error);
-      });
-  };
   const handleHelpIconClick = () => {
-    // navigate("/ajuda");
+    // Implemente a lógica para o ícone de ajuda, se necessário
   };
 
   return (
@@ -230,4 +223,6 @@ export default function Register() {
       />
     </div>
   );
-}
+};
+
+export default Register;

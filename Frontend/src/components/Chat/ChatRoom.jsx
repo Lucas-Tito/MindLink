@@ -1,60 +1,108 @@
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import "./style.css";
-import Sidebar from "../Sidebar";
-import Sidebar2 from "../Sidebar2";
+import firebase from "firebase/compat/app";
+import "firebase/compat/firestore"; // Importação do Firestore separadamente
+import Sidebar from "../Sidebar"; // Componente Sidebar
+import Sidebar2 from "../Sidebar2"; // Componente Sidebar2
+import ChatMessage from "./ChatMessage"; // Componente ChatMessage
 
-import firebase from "firebase/compat/app"; // Importação do Firebase
-import { useCollectionData } from "react-firebase-hooks/firestore"; // Importação do hook useCollectionData
-import ChatMessage from "./ChatMessage"; // Importação do componente ChatMessage
-import SignOut from "../Login/SignOut";
+// Inicialização das instâncias de autenticação e Firestore
+const auth = firebase.auth();
+const firestore = firebase.firestore();
 
-const auth = firebase.auth(); // Instância de autenticação do Firebase
-const firestore = firebase.firestore(); // Instância do Firestore do Firebase
 const ChatRoom = () => {
-  const dummy = useRef(); // Referência para o último elemento da lista de mensagens
-  const messagesRef = firestore.collection("messages"); // Referência para a coleção "messages" no Firestore
-  const query = messagesRef.orderBy("createdAt").limit(25); // Query para obter as últimas 25 mensagens, ordenadas por data de criação
+  const dummy = useRef(); // Referência para o final da lista de mensagens, para rolagem automática
+  const [messages, setMessages] = useState([]); // Estado para armazenar as mensagens
+  const [formValue, setFormValue] = useState(""); // Estado para armazenar o valor do formulário de entrada
+  const [selectedUser, setSelectedUser] = useState(null); // Estado para armazenar o usuário selecionado
 
-  // useCollectionData é um hook que sincroniza automaticamente uma coleção do Firestore com um estado local
-  const [messages] = useCollectionData(query, { idField: "id" }); // Array de mensagens e atualização automática do estado quando a coleção muda
+  // useEffect para buscar e atualizar mensagens sempre que selectedUser mudar
+  useEffect(() => {
+    if (selectedUser) {
+      const userId1 = auth.currentUser.uid; // ID do usuário atual
+      const userId2 = selectedUser.uid; // ID do usuário selecionado
 
-  const [formValue, setFormValue] = useState(""); // Estado local para armazenar o valor do formulário de entrada
+      console.log("Fetching messages between:", userId1, "and", userId2);
 
-  // Função assíncrona para enviar uma nova mensagem
+      // Consulta ao Firestore para buscar mensagens onde userId1 é um dos participantes
+      const query = firestore
+        .collection("messages")
+        .where("participants", "array-contains", userId1)
+        .orderBy("createdAt")
+        .limit(25);
+
+      // Inscrição na consulta para atualizar mensagens em tempo real
+      const unsubscribe = query.onSnapshot((snapshot) => {
+        const data = snapshot.docs
+          .map((doc) => ({
+            id: doc.id,
+            ...doc.data(),
+          }))
+          .filter((doc) => doc.participants.includes(userId2)); // Filtra mensagens com o outro participante
+
+        console.log("Fetched messages:", data);
+        setMessages(data); // Atualiza o estado messages com os dados recebidos do Firestore
+        dummy.current.scrollIntoView({ behavior: "smooth" }); // Rola para o final da lista de mensagens
+      });
+
+      // Limpeza da inscrição na consulta quando o componente é desmontado ou selectedUser muda
+      return () => unsubscribe();
+    }
+  }, [selectedUser]);
+
+  // Função para enviar mensagem
   const sendMessage = async (e) => {
-    e.preventDefault(); // Prevenir o comportamento padrão do formulário
+    e.preventDefault(); // Previne o comportamento padrão do formulário
 
-    const { uid } = auth.currentUser; // ID do usuário atualmente autenticado
+    const { uid } = auth.currentUser; // ID do usuário atual
+    const receiverId = selectedUser.uid; // ID do usuário selecionado
 
-    // Adiciona uma nova mensagem ao Firestore com o texto, a data de criação e o ID do usuário
-    await messagesRef.add({
-      text: formValue,
-      createdAt: firebase.firestore.FieldValue.serverTimestamp(), // Marca de tempo do servidor para garantir ordem correta das mensagens
-      uid,
+    console.log("Sending message to:", receiverId);
+
+    // Adiciona uma nova mensagem ao Firestore
+    await firestore.collection("messages").add({
+      text: formValue, // Texto da mensagem
+      createdAt: firebase.firestore.FieldValue.serverTimestamp(), // Timestamp do servidor para a mensagem
+      participants: [uid, receiverId], // IDs dos participantes da conversa
+      senderId: uid, // ID do remetente
+      receiverId: receiverId, // ID do destinatário
     });
 
-    setFormValue(""); // Limpa o campo de entrada após o envio da mensagem
-    dummy.current.scrollIntoView({ behavior: "smooth" }); // Rola a tela para a última mensagem
+    setFormValue(""); // Limpa o valor do formulário de entrada
   };
+
   return (
     <div>
-      <Sidebar />
-      <Sidebar2 />
+      <Sidebar /> {/* Renderiza o componente Sidebar */}
+      <Sidebar2 onSelectUser={setSelectedUser} />{" "}
+      {/* Renderiza o componente Sidebar2 e passa a função setSelectedUser como prop */}
       <div className="chat-room">
         <div className="chat-header">
-          <img
-            src="caminho_para_a_sua_foto"
-            alt="Foto do Usuário"
-            className="user-avatar"
-          />
-          <h3 className="user-name">Nome do Usuário</h3>
+          {selectedUser ? (
+            <>
+              <img
+                src={selectedUser.photoURL}
+                alt="Foto do Usuário"
+                className="user-avatar"
+              />
+              <h3 className="user-name">{selectedUser.name}</h3>
+            </>
+          ) : (
+            <>
+              <img
+                src="caminho_para_a_sua_foto"
+                alt="Foto do Usuário"
+                className="user-avatar"
+              />
+              <h3 className="user-name">Nome do Usuário</h3>
+            </>
+          )}
         </div>
         <div className="chat-messages">
-          {messages &&
-            messages.map((msg) => <ChatMessage key={msg.id} message={msg} />)}
-
-          {/* Espaço reservado para rolar a tela para a última mensagem */}
-          <span ref={dummy}></span>
+          {messages.map((msg) => (
+            <ChatMessage key={msg.id} message={msg} /> // Renderiza cada mensagem usando o componente ChatMessage
+          ))}
+          <span ref={dummy}></span> {/* Span vazio para rolagem automática */}
         </div>
         <div className="message-input">
           <textarea
