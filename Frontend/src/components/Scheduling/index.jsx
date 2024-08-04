@@ -1,8 +1,8 @@
 import React from "react";
-import Sidebar from "../Sidebar";
-import Sidebar2 from "../Sidebar2";
+import MenuSidebar from "../MenuSidebar/MenuSidebar";
 import lazin from "../../assets/lazin.png";
 import "./style.css";
+import ChatSidebar from "../ChatSidebar/ChatSidebar";
 
 function Scheduling() {
   // Dias da semana
@@ -25,8 +25,8 @@ function Scheduling() {
 
   return (
     <div>
-      <Sidebar />
-      <Sidebar2 />
+      <MenuSidebar />
+      <ChatSidebar />
       <div className="scheduling">
         <img src={lazin} />
         <span className="nome">Lázaro Baitola da Silva</span>

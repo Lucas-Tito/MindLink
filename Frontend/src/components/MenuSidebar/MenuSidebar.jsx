@@ -7,9 +7,8 @@ import logoIcon from "../../assets/Logo.svg";
 import lupaIcon from "../../assets/lupaIcon.svg";
 import engineIcon from "../../assets/engine.svg";
 import cerebroIcon from "../../assets/cerebro.png";
-import Sidebar2 from "../Sidebar2";
 
-const Sidebar = () => {
+const MenuSidebar = () => {
   return (
     <div>
       <div class="sidebar">
@@ -66,7 +65,7 @@ const Sidebar = () => {
                 width: "40px",
                 left: "30px",
                 position: "absolute",
-                top: "630px",
+                top: "600px",
               }}
             />
           </li>
@@ -76,4 +75,4 @@ const Sidebar = () => {
   );
 };
 
-export default Sidebar;
+export default MenuSidebar;

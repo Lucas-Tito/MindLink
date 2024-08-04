@@ -2,10 +2,9 @@ import React, { useRef, useState, useEffect } from "react";
 import "./style.css";
 import firebase from "firebase/compat/app";
 import "firebase/compat/firestore"; // Importação do Firestore separadamente
-import Sidebar from "../Sidebar"; // Componente Sidebar
-import Sidebar2 from "../Sidebar2"; // Componente Sidebar2
+import MenuSidebar from "../MenuSidebar/MenuSidebar"; // Componente Sidebar
 import ChatMessage from "./ChatMessage"; // Componente ChatMessage
-
+import ChatSidebar from "../ChatSidebar/ChatSidebar";
 // Inicialização das instâncias de autenticação e Firestore
 const auth = firebase.auth();
 const firestore = firebase.firestore();
@@ -73,8 +72,8 @@ const ChatRoom = () => {
 
   return (
     <div>
-      <Sidebar /> {/* Renderiza o componente Sidebar */}
-      <Sidebar2 onSelectUser={setSelectedUser} />{" "}
+      <MenuSidebar />
+      <ChatSidebar onSelectUser={setSelectedUser} />{" "}
       {/* Renderiza o componente Sidebar2 e passa a função setSelectedUser como prop */}
       <div className="chat-room">
         <div className="chat-header">

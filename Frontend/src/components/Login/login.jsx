@@ -37,7 +37,6 @@ const Login = ({ signInWithEmailAndPassword }) => {
             />
           </div>
           <div>
-            <img src={senhaIcon} className="input-icon2" />
             <input
               type="password"
               placeholder="Senha"
