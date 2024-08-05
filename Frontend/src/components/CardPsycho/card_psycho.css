@@ -1,52 +1,57 @@
-.cardPsycho{
-    display: flex;
-    flex-direction: column;
-    margin: 10px 10px;
-    padding: 20px;
-
-    border-radius: 10px;
-    width: fit-content;
-
-    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
-    background-color: white;
+.containerPsycho {
+  display: flex;
+  flex-wrap: wrap; /* Permite que os cartões quebrem para a linha seguinte se não houver espaço */
+  justify-content: center; /* Centraliza os cartões no container */
+  gap: 30px; /* Adiciona espaçamento entre os cartões */
+  margin-left: 400px;
 }
 
-.cardPsycho img{
-    width: 120px;
-    height: 120px;
-    border-radius: 52px;
-    align-self: center;
+.cardPsycho {
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+  border-radius: 10px;
+  width: 250px; /* Define uma largura fixa para os cartões */
+  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+  background-color: white;
+  box-sizing: border-box; /* Garante que padding e border sejam incluídos na largura total do cartão */
 }
 
-.cardPsychoHeader{
-    display: flex;
-    flex-direction: column;
-    margin: 10px 0 30px 0;
+.cardPsycho img {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%; /* Atualiza para círculo perfeito */
+  align-self: center;
 }
 
-.cardPsychoHeader .title{
-    color: #3C3C43;
-    margin: 0;
-
-    font-size: 1.2rem;
+.cardPsychoHeader {
+  display: flex;
+  flex-direction: column;
+  margin: 10px 0 30px 0;
 }
 
-.cardPsychoHeader .subtitle{
-    color: #81859E;
-    font-size: 0.9rem;
+.cardPsychoHeader .title {
+  color: #3c3c43;
+  margin: 0;
+  font-size: 1.2rem;
 }
 
-.cardPsychoDesc{
-    color: #666666;
-    font-size: 0.9rem;
-    margin-bottom: 30px;
+.cardPsychoHeader .subtitle {
+  color: #81859e;
+  font-size: 0.9rem;
 }
 
-.cardPsychoBtn{
-    color: #FFFFFF;
-    background-color: #5D5FEF;
-    border: 0;
-    padding: 10px;
-    border-radius: 15px;
-    cursor: pointer;
+.cardPsychoDesc {
+  color: #666666;
+  font-size: 0.9rem;
+  margin-bottom: 30px;
+}
+
+.cardPsychoBtn {
+  color: #ffffff;
+  background-color: #5d5fef;
+  border: 0;
+  padding: 10px;
+  border-radius: 15px;
+  cursor: pointer;
 }

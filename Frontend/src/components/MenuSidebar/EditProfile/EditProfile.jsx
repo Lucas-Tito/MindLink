@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import Sidebar from "../Sidebar";
-import SidebarSettings from "../SidebarSettings";
+import SidebarSettings from "../MenuSidebar/SidebarSettings";
 import lazin from "../../assets/lazin.png";
 
 import "./style.css";

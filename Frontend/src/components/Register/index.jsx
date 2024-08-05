@@ -9,7 +9,7 @@ import cerebro_icon from "../../assets/cerebro.png";
 import imagem_consulta from "../../assets/imagemConsulta.png";
 import personIcon from "../../assets/personIcon.svg";
 import ajudaIcon from "../../assets/ajuda.png";
-import senhaIcon from "../../assets/senha.svg";
+//import senhaIcon from "../../assets/senha.svg";
 
 const Register = () => {
   const [isChecked, setIsChecked] = useState(false);
@@ -154,7 +154,6 @@ const Register = () => {
               />
             </div>
             <div>
-              <img src={senhaIcon} className="input-icon1" />
               <input
                 type="password"
                 placeholder="Senha"

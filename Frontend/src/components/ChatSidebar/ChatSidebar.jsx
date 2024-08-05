@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from "react";
 import "./style.css";
-import CardChat from "../CardChat"; // Componente CardChat
-import SearchBar from "../Search"; // Componente SearchBar
+import CardChat from "./CardChat"; // Componente CardChat
+import SearchBar from "../MenuSidebar/Search/Search"; // Componente SearchBar
 import firebase from "firebase/compat/app"; // Importação do Firebase compat
 
 // Inicialização da autenticação do Firebase
 const auth = firebase.auth();
 
-const Sidebar2 = ({ onSelectUser }) => {
+const ChatSidebar = ({ onSelectUser }) => {
   // Estados para armazenar a quantidade de mensagens e a lista de usuários
   const [qtdMensagens, setQtdMensagens] = useState(0);
   const [usuarios, setUsuarios] = useState([]);
@@ -33,7 +33,7 @@ const Sidebar2 = ({ onSelectUser }) => {
         const data = await response.json();
         console.log("Dados recebidos da API:", data); // Log dos dados recebidos
         setUsuarios(data); // Atualiza o estado de usuários com os dados recebidos
-        setQtdMensagens(data.length); // Atualiza o estado da quantidade de mensagens
+        setQtdMensagens(data.length - 1); // Atualiza o estado da quantidade de mensagens
       } catch (error) {
         console.error("Erro ao buscar usuários:", error);
       }
@@ -57,7 +57,7 @@ const Sidebar2 = ({ onSelectUser }) => {
         {usuarios.map(
           (usuario, index) =>
             // Renderiza o CardChat apenas se o ID do usuário não for igual ao ID do usuário atual
-            usuario.uid !== auth.currentUser.uid && (
+            usuario?.uid !== auth.currentUser?.uid && (
               <li key={index} onClick={() => onSelectUser(usuario)}>
                 <CardChat nome={usuario.name} photoURL={usuario.photoURL} />{" "}
                 {/* Renderiza o CardChat com o nome e foto do usuário */}
@@ -69,4 +69,4 @@ const Sidebar2 = ({ onSelectUser }) => {
   );
 };
 
-export default Sidebar2;
+export default ChatSidebar;
