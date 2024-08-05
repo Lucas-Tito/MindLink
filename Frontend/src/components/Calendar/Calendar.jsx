@@ -28,11 +28,13 @@ export default function Calendar() {
                 table_headers[7].querySelector("span"),
             ]
 
+            //Filling headers with current week days
             const today = new Date()
             for (let i = 0; i < headers_spans.length; i++) {
 
                 headers_spans[i].textContent = currentWeekDays[i]
                 
+                //Highlights current day
                 if(today.getDate() == headers_spans[i].textContent){
                     // console.log("got in");
                     table_headers[i+1].classList.add("active")
@@ -40,6 +42,7 @@ export default function Calendar() {
                 // console.log("today="+today+" header="+headers_spans[i].textContent);
             }
 
+            //Fills week selector
             let weekSelectorSpan = document.querySelector('.week_selector_span')
             weekSelectorSpan.textContent = `${getCurrentMonth} ${currentWeekDays[0]}
              - ${currentWeekDays[6]}, ${today.getFullYear()}`
