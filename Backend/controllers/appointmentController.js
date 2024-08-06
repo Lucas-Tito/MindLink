@@ -32,11 +32,11 @@ const appointmentController = {
   createAppointment: async (request, response) => {
     console.log("Create Appointment");
     const appointment = {
-      email: request.body.email,
-      name: request.body.name,
-      password: request.body.password,
-      professionalType: request.body.professionalType,
-      photoURL: request.body.photoURL,
+      patientName: request.body.patientName,
+      patientId: request.body.patientId,
+      professionalName: request.body.professionalName,
+      professionalId: request.body.professionalId,
+      appointmentDate: request.body.appointmentDate,
     };
 
     try {
