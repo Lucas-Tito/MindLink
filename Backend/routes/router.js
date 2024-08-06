@@ -7,8 +7,10 @@ const router = express.Router()
 //routers
 import userRouter from "./userRouter.js"
 import userConnectionRouter from "./usersConnetionRouter.js"
+import userConnectionRouter from "./appointmentRouter.js"
 
 router.use("/", userRouter)
 router.use("/", userConnectionRouter)
+router.use("/",appointmentRouter)
 
 export default router
