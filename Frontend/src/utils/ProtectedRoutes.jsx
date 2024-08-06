@@ -1,5 +1,7 @@
 import { createContext, useContext, useState } from "react"
 import { Outlet, Navigate } from "react-router-dom"
+import SignIn from "../components/Login/SignIn"
+import RenderRoutes from "./RenderRoutes"
 
 const AuthContext = createContext()
 export const AuthData = () => useContext(AuthContext)
@@ -27,9 +29,8 @@ export default function ProtectedRoutes(){
           
         <AuthContext.Provider value={{user, login, logout}}>
              <>
-                  <RenderHeader />
-                  <RenderMenu />
-                  <RenderRoutes />
+                  <SignIn/>
+                  <RenderRoutes/>
              </>
              
         </AuthContext.Provider>
