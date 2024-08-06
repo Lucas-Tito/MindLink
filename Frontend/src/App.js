@@ -7,13 +7,17 @@ import { useAuthState } from "react-firebase-hooks/auth";
 import ChatRoom from "./components/Chat/ChatRoom";
 import Scheduling from "./components/Scheduling";
 import { Home } from "./components/Home/Home";
+import { BrowserRouter } from "react-router-dom";
+import ProtectedRoutes from "./utils/ProtectedRoutes";
 
 function App() {
   const [user] = useAuthState(auth);
 
   return (
     <div className="App">
-      <Home />
+      <BrowserRouter>
+        <ProtectedRoutes/>
+      </BrowserRouter>
     </div>
   );
 }
