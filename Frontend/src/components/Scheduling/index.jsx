@@ -3,8 +3,14 @@ import MenuSidebar from "../MenuSidebar/MenuSidebar";
 import lazin from "../../assets/lazin.png";
 import "./style.css";
 import ChatSidebar from "../ChatSidebar/ChatSidebar";
+import { useLocation } from 'react-router-dom';
 
 function Scheduling() {
+  const location = useLocation();
+  const professional = location.state?.professional;
+  console.log(location);
+  
+  console.log(professional);
   // Dias da semana
   const diasSemana = [
     "Domingo",
@@ -28,11 +34,11 @@ function Scheduling() {
       <MenuSidebar />
       <ChatSidebar />
       <div className="scheduling">
-        <img src={lazin} />
-        <span className="nome">Lázaro Baitola da Silva</span>
+        <img src={professional.photoURL} />
+        <span className="nome">{professional.name}</span>
         <span>Especialidade</span>
         <span>Fortaleza - Ce</span>
-        <span>Corno</span>
+        <span>Psicanalista</span>
         <button type="button" className="btn-sche">
           Ver Perfil Completo
         </button>
