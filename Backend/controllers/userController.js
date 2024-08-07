@@ -17,6 +17,23 @@ const userController = {
       });
   },
 
+  getProfessionalUser: async (request,response) =>
+    {
+      try
+      {
+        admin.firestore().collection("Users").where("professionalType","==", true).get()
+        .then((snapshot) =>{
+          const users = snapshot.docs.map((doc) => ({
+            ...doc.data(),
+            uid: doc.id,  
+          }));
+          response.json(users);
+        }); 
+      }catch (error){
+          response.status(500).json({error: "Erro ao pegar usuários do tipo profissional"});
+      }  
+    },
+
   getUserById: async (request, response) => {
     console.log("Get User by Id");
     console.log(request.params);
