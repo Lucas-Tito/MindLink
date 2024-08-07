@@ -1,18 +1,25 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import "./style.css";
 import cerebro_icon from "../../assets/cerebro.png";
 import imagem_consulta from "../../assets/imagemConsulta.png";
 import personIcon from "../../assets/personIcon.svg";
 import ajudaIcon from "../../assets/ajuda.png";
 import senhaIcon from "../../assets/senha.svg";
+import { AuthContext } from "../../utils/ProtectedRoutes";
+import { useNavigate } from "react-router-dom";
 
-const Login = ({ signInWithEmailAndPassword }) => {
+
+export default function Login () {
+  const {loginFunction} = useContext(AuthContext)
   const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [password, setPassword] = useState("");  
+  const navigate = useNavigate()
 
   const handleSignIn = async () => {
     try {
-      await signInWithEmailAndPassword(email, password);
+      await loginFunction(email, password);
+      console.log("loged");
+      navigate("/")
     } catch (error) {
       console.error("Error signing in with email and password:", error);
     }
@@ -81,4 +88,4 @@ const Login = ({ signInWithEmailAndPassword }) => {
   );
 };
 
-export default Login;
+

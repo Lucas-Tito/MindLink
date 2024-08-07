@@ -11,7 +11,7 @@ import cerebroIcon from "../../assets/cerebro.png";
 const MenuSidebar = () => {
   return (
     <div>
-      <div class="sidebar">
+      <div className="sidebar">
         <ul>
           <li>
             <img

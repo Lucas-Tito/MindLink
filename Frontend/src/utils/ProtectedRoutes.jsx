@@ -1,18 +1,24 @@
 import { createContext, useContext, useState } from "react"
 import { Outlet, Navigate } from "react-router-dom"
-import SignIn from "../components/Login/SignIn"
 import RenderRoutes from "./RenderRoutes"
+import firebase from "firebase/compat/app";
+import Login from "../components/Login/login";
 
-const AuthContext = createContext()
-export const AuthData = () => useContext(AuthContext)
+export const AuthContext = createContext()
 
 export default function ProtectedRoutes(){
 
     const [user, setUser] = useState({name:"", isAuthenticated:false})
-
-    function login(userName, password) {
-        //...
-    }
+    const auth = firebase.auth();
+    
+    const loginFunction = async (login, password) => {
+        try {
+          await auth.signInWithEmailAndPassword(login, password);
+          setUser({ name: login, isAuthenticated: true });
+        } catch (error) {
+          console.error("Error signing in with email and password:", error);
+        }
+      };
 
     function logout(){
         setUser({...user, isAuthenticated:false})
@@ -27,10 +33,9 @@ export default function ProtectedRoutes(){
     //No nosso caso dentro do provider estarão o login, o cadastro e esse renderRoutes que seriam as telas protegidas
     return (
           
-        <AuthContext.Provider value={{user, login, logout}}>
+        <AuthContext.Provider value={{user, loginFunction, logout}}>
              <>
-                  <SignIn/>
-                  <RenderRoutes/>
+                <RenderRoutes/>
              </>
              
         </AuthContext.Provider>
