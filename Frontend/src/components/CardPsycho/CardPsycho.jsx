@@ -60,7 +60,7 @@ export default function CardPsycho() {
     console.log("rock");
     console.log(professional);
 
-    navigate('/professionalProfile', { state: {professional} });
+    navigate('/professionalProfile', { state: {data:professional} });
   }
 
   return (
