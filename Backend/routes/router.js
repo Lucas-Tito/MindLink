@@ -8,9 +8,11 @@ const router = express.Router()
 import userRouter from "./userRouter.js"
 import userConnectionRouter from "./usersConnetionRouter.js"
 import appointmentRouter from "./appointmentRouter.js"
+import messagesRouter from "./messagesRouter.js"
 
 router.use("/", userRouter)
 router.use("/", userConnectionRouter)
 router.use("/", appointmentRouter)
+router.use("/", messagesRouter)
 
 export default router
