@@ -82,7 +82,8 @@ const appointmentController = {
       .where("appointmentDate.month", "==", appointment.appointmentDate.month)
       .where("appointmentDate.day", "==", appointment.appointmentDate.day)
       .where("appointmentDate.hour", "==", appointment.appointmentDate.hour)
-      .where("appointmentDate.minutes", "==", appointment.appointmentDate.minutes)
+      .where("appointmentDate.minutes", "==", appointment.appointmentDate.minutes).get();
+
 
       if (!appointmentConflictQuery.empty) {
         return response.status(400).json({
