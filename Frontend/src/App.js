@@ -19,7 +19,7 @@ function App() {
       {/* <BrowserRouter>
         <ProtectedRoutes/>
       </BrowserRouter> */}
-      <SchedulingCalendar/>
+      <SchedulingCalendar />
     </div>
   );
 }
