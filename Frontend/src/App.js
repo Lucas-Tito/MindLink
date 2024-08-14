@@ -16,17 +16,17 @@ function App() {
 
   return (
     <div className="App">
-      {/* <BrowserRouter>
+      <BrowserRouter>
         <ProtectedRoutes />
-      </BrowserRouter> */}
+      </BrowserRouter>
 
       {/* <SchedulingCalendar /> */}
-
+      {/* 
       <header>
         <SignOut />
       </header>
 
-      <section>{user ? <ChatRoom /> : <SignIn />}</section>
+      <section>{user ? <ChatRoom /> : <Login />}</section> */}
     </div>
   );
 }

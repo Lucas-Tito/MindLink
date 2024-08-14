@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "./card_psycho.css";
 import car from "../../assets/pfp/suprisedCar.png";
-import {Link, useNavigate} from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom";
 
 const psychoData = [
   {
@@ -23,8 +23,6 @@ const psychoData = [
     image: car,
   },
 ];
-  
- 
 
 export default function CardPsycho() {
   const [professionals, setProfessionals] = useState([]);
@@ -34,7 +32,9 @@ export default function CardPsycho() {
     const fetchProfessionals = async () => {
       try {
         // Faz uma requisição GET para a API
-        const response = await fetch("http://localhost:3000/mindlink/professionalUsers");
+        const response = await fetch(
+          "http://localhost:3000/mindlink/professionalUsers"
+        );
 
         // Verifica se a resposta é válida
         if (!response.ok) {
@@ -45,7 +45,6 @@ export default function CardPsycho() {
         const data = await response.json();
         console.log("Dados recebidos da API:", data); // Log dos dados recebidos
         setProfessionals(data); // Atualiza o estado de usuários com os dados recebidos
-
       } catch (error) {
         console.error("Erro ao buscar usuários:", error);
       }
@@ -56,11 +55,12 @@ export default function CardPsycho() {
   }, []);
 
   const navigate = useNavigate();
-  function handleSubmit(professional){
+  function handleSubmit(professional) {
     console.log("rock");
     console.log(professional);
 
-    navigate('/professionalProfile', { state: {data:professional} });
+    // navigate('/professionalProfile', { state: {data:professional} });
+    navigate("/chat");
   }
 
   return (
@@ -76,7 +76,12 @@ export default function CardPsycho() {
           {/* <Link className="cardPsychoBtn" to="/professionalProfile">
             Agendar Consulta
           </Link> */}
-          <button className="cardPsychoBtn" onClick={()=>handleSubmit(psycho)}>Agendar Consulta</button>
+          <button
+            className="cardPsychoBtn"
+            onClick={() => handleSubmit(psycho)}
+          >
+            Agendar Consulta
+          </button>
         </div>
       ))}
     </div>
