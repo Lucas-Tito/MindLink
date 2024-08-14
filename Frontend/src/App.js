@@ -17,9 +17,16 @@ function App() {
   return (
     <div className="App">
       {/* <BrowserRouter>
-        <ProtectedRoutes/>
+        <ProtectedRoutes />
       </BrowserRouter> */}
-      <SchedulingCalendar />
+
+      {/* <SchedulingCalendar /> */}
+
+      <header>
+        <SignOut />
+      </header>
+
+      <section>{user ? <ChatRoom /> : <SignIn />}</section>
     </div>
   );
 }
