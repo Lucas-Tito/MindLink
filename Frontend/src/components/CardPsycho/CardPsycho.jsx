@@ -3,27 +3,6 @@ import "./card_psycho.css";
 import car from "../../assets/pfp/suprisedCar.png";
 import { Link, useNavigate } from "react-router-dom";
 
-const psychoData = [
-  {
-    name: "Lucas Tito da Silva",
-    title: "Psicólogo Social",
-    education: "Formado na Universidade Federal do Ceará.",
-    image: car,
-  },
-  {
-    name: "Lázaro Junior",
-    title: "Psicólogo Criminal",
-    education: "Formado na Universidade Federal do Ceará.",
-    image: car,
-  },
-  {
-    name: "José Anderson",
-    title: "Psicólogo Clínico",
-    education: "Formado na Universidade Federal do Ceará.",
-    image: car,
-  },
-];
-
 export default function CardPsycho() {
   const [professionals, setProfessionals] = useState([]);
 
@@ -59,8 +38,7 @@ export default function CardPsycho() {
     console.log("rock");
     console.log(professional);
 
-    // navigate('/professionalProfile', { state: {data:professional} });
-    navigate("/chat");
+    navigate("/professionalProfile", { state: { data: professional } });
   }
 
   return (

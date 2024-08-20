@@ -3,7 +3,7 @@
   flex-wrap: wrap; /* Permite que os cartões quebrem para a linha seguinte se não houver espaço */
   justify-content: center; /* Centraliza os cartões no container */
   gap: 30px; /* Adiciona espaçamento entre os cartões */
-  margin-left: 400px;
+  margin-left: 100px;
 }
 
 .cardPsycho {

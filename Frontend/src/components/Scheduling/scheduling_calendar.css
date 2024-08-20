@@ -1,118 +1,101 @@
-@import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap");
-*, *:after, *:before {
-  box-sizing: border-box;
-}
-
 :root {
-  --c-theme-primary: #008FFD;
-  --c-theme-primary-accent: #CBE8FF;
-  --c-bg-primary: #D6DAE0;
-  --c-bg-secondary: #EAEBEC;
-  --c-bg-tertiary: #FDFDFD;
-  --c-text-primary: #1F1F25;
-  --c-text-secondary: #999FA6;
-}
-
-.scheduling_calendar{
-  display: flex;
-  flex-direction: row;
-  gap: 50px;
-}
-
-.datepicker button {
-  font: inherit;
-  cursor: pointer;
-}
-.datepicker button:focus {
-  outline: 0;
+  --c-theme-primary: #008ffd;
+  --c-theme-primary-accent: #cbe8ff;
+  --c-bg-primary: #d6dae0;
+  --c-bg-secondary: #eaebec;
+  --c-bg-tertiary: #fdfdfd;
+  --c-text-primary: #1f1f25;
+  --c-text-secondary: #999fa6;
+  --c-text-high-emphasis: #000; /* Cor para texto que deve se destacar */
+  --c-border-color: #e0e0e0; /* Cor para bordas e linhas */
 }
 
 .datepicker {
   width: 95%;
   max-width: 350px;
   background-color: var(--c-bg-tertiary);
-  border-radius: 10px;
-  box-shadow: 0 0 2px 0 rgba(0, 0, 0, 0.2), 0 5px 10px 0 rgba(0, 0, 0, 0.1);
+  border-radius: 8px; /* Suaviza o arredondamento dos cantos */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Ajusta a sombra para um efeito mais suave */
   padding: 1rem;
+  margin: 0 auto; /* Centraliza o componente */
 }
 
 .datepicker-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   margin-bottom: 1rem;
-}
-
-
-.tag {
-  margin-right: 0.5rem;
-  margin-top: 0.5rem;
-  border: 0;
-  background-color: var(--c-bg-secondary);
-  border-radius: 10px;
-  padding: 0.5em 0.75em;
-  font-weight: 600;
 }
 
 .month-selector {
   display: flex;
-  justify-content: space-between;
   align-items: center;
 }
 
 .arrow {
+  background-color: var(
+    --c-bg-primary
+  ); /* Cor de fundo dos botões de navegação */
+  border: 1px solid var(--c-border-color); /* Adiciona uma borda ao redor dos botões */
+  border-radius: 50%;
+  width: 2rem;
+  height: 2rem;
   display: flex;
   align-items: center;
   justify-content: center;
-  border: 0;
-  background-color: #FFF;
-  border-radius: 30px;
-  width: 2rem;
-  height: 2rem;
-  box-shadow: rgba(0, 0, 0, 0.24) 0px 2px 5px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Ajusta a sombra dos botões */
 }
 
-.arrow img{
+.arrow img {
   width: 1rem;
   height: 1rem;
 }
 
 .month-name {
   font-weight: 600;
+  color: var(--c-text-high-emphasis); /* Destaca o nome do mês */
 }
 
 .datepicker-calendar {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
-  grid-row-gap: 1rem;
+  gap: 1rem;
 }
 
-.day, .date {
-  justify-self: center;
+.day,
+.date {
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .day {
   color: var(--c-text-secondary);
-  font-size: 0.875em;
+  font-size: 0.875rem; /* Ajusta o tamanho da fonte */
   font-weight: 500;
-  justify-self: center;
 }
 
 .date {
-  border: 0;
-  padding: 0;
-  width: 2.25rem;
-  height: 2.25rem;
+  width: 2.5rem; /* Aumenta um pouco o tamanho dos botões de data */
+  height: 2.5rem;
+  border-radius: 50%; /* Torna os botões de data circulares */
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: 6px;
   font-weight: 600;
   border: 2px solid transparent;
   background-color: transparent;
   cursor: pointer;
+  transition: background-color 0.2s ease, border-color 0.2s ease; /* Adiciona transições suaves */
 }
+
+.date:hover,
 .date:focus {
-  outline: 0;
-  color: var(--c-theme-primary);
-  border: 2px solid var(--c-theme-primary-accent);
+  background-color: var(
+    --c-theme-primary-accent
+  ); /* Adiciona um fundo ao passar o mouse ou focar */
+  border-color: var(--c-theme-primary);
+  color: var(--c-text-primary);
 }
 
 .faded {
@@ -120,10 +103,7 @@
 }
 
 .current-day {
-  color: #FFF;
-  border-color: var(--c-theme-primary);
+  color: #fff;
   background-color: var(--c-theme-primary);
-}
-.current-day:focus {
-  background-color: var(--c-theme-primary-accent);
+  border-color: var(--c-theme-primary);
 }

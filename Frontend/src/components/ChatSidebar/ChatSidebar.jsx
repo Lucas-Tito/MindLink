@@ -12,14 +12,14 @@ const firestore = firebase.firestore();
 const ChatSidebar = ({ onSelectUser }) => {
   const [qtdMensagens, setQtdMensagens] = useState(0);
   const [usuarios, setUsuarios] = useState([]);
-  const [patientId, setPatientId] = useState("");
+  const [ids, setIds] = useState([]);
 
   const handleSearch = (term) => {
     console.log("Termo de busca:", term);
   };
 
   useEffect(() => {
-    const fetchUserTypeAndId = async () => {
+    const fetchUserTypeAndIds = async () => {
       try {
         const user = auth.currentUser;
         if (user) {
@@ -42,42 +42,55 @@ const ChatSidebar = ({ onSelectUser }) => {
             .get();
 
           if (!userConnectionQuery.empty) {
+            const idsArray = [];
             userConnectionQuery.forEach((doc) => {
               const connectionData = doc.data();
               const id = isProfessional
                 ? connectionData.patientId
                 : connectionData.professionalId;
-              setPatientId(id);
+              if (!idsArray.includes(id)) {
+                idsArray.push(id); // Adiciona o ID ao array se não estiver presente
+              }
             });
+            setIds(idsArray);
           } else {
             console.log("No connections found for this user.");
           }
         }
       } catch (error) {
-        console.error("Erro ao buscar patientId:", error);
+        console.error("Erro ao buscar IDs:", error);
       }
     };
 
-    fetchUserTypeAndId();
+    fetchUserTypeAndIds();
   }, []);
 
   useEffect(() => {
     const fetchUsuarios = async () => {
-      if (!patientId) return;
+      if (ids.length === 0) return;
 
       try {
-        const response = await fetch(
-          `http://localhost:3000/mindlink/users/${patientId}`
+        // Faz a requisição para todos os IDs
+        const fetchPromises = ids.map((id) =>
+          fetch(`http://localhost:3000/mindlink/users/${id}`).then(
+            (response) => {
+              if (!response.ok) {
+                throw new Error(`HTTP error! Status: ${response.status}`);
+              }
+              return response.json();
+            }
+          )
         );
-        if (!response.ok) {
-          throw new Error(`HTTP error! Status: ${response.status}`);
-        }
-        const data = await response.json();
-        console.log("Dados recebidos da API:", data);
 
-        const usuariosArray = Array.isArray(data) ? data : [data];
-        setUsuarios(usuariosArray);
-        setQtdMensagens(usuariosArray.length); // Atualiza a quantidade de mensagens com o tamanho do array
+        // Aguarda todas as promessas de busca serem concluídas
+        const usersData = await Promise.all(fetchPromises);
+
+        // Combina todos os dados recebidos em um único array
+        const combinedUsers = usersData.flat();
+        console.log("Dados recebidos da API:", combinedUsers);
+
+        setUsuarios(combinedUsers);
+        setQtdMensagens(combinedUsers.length); // Atualiza a quantidade de mensagens com o tamanho do array
       } catch (error) {
         console.error("Erro ao buscar usuários:", error);
         setQtdMensagens(0);
@@ -85,7 +98,7 @@ const ChatSidebar = ({ onSelectUser }) => {
     };
 
     fetchUsuarios();
-  }, [patientId]);
+  }, [ids]);
 
   return (
     <div className="sidebar2 sidebar2-right">

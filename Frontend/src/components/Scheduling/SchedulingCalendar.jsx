@@ -4,6 +4,7 @@ import arrow_left_icon from "../../assets/arrow_left.svg";
 import arrow_right_icon from "../../assets/arrow_right.svg";
 
 export default function SchedulingCalendar() {
+  // Estado para armazenar a data do agendamento
   const [appointmentDate, setAppointmentDate] = useState({
     year: null,
     month: null,
@@ -12,14 +13,25 @@ export default function SchedulingCalendar() {
     minutes: null,
     seconds: 0,
   });
+
+  // Estado para armazenar os horários disponíveis
   const [availableTimes, setAvailableTimes] = useState([]);
+
+  // Estados para armazenar informações do paciente e profissional
   const [patientName, setPatientName] = useState("");
   const [patientId, setPatientId] = useState("");
   const [professionalName, setProfessionalName] = useState("Dr. Smith"); // Mockado
   const [professionalId, setProfessionalId] = useState(); // Mockado
-  const [shouldSendAppointment, setShouldSendAppointment] = useState(false); // Novo estado para controlar o envio
-  const user = "2WRBFGbLRaWHnXmMQ9Tmf68gx2v2"; // Substitua pelo ID do usuário real se necessário
 
+  // Estado para controlar o envio dos dados do agendamento
+  const [shouldSendAppointment, setShouldSendAppointment] = useState(false);
+
+  // Estado para gerenciar a data atual usada na navegação do calendário
+  const [currentDate, setCurrentDate] = useState(new Date());
+
+  const user = "2WRBFGbLRaWHnXmMQ9Tmf68gx2v2"; // ID do usuário (mockado)
+
+  // Efeito para buscar dados do paciente quando o componente é montado
   useEffect(() => {
     const fetchPatientData = async () => {
       try {
@@ -43,6 +55,7 @@ export default function SchedulingCalendar() {
     fetchPatientData();
   }, [user]);
 
+  // Efeito para buscar horários disponíveis quando o componente é montado
   useEffect(() => {
     const fetchAvailableTimes = async () => {
       // Simulando uma chamada à API para obter horários disponíveis
@@ -52,6 +65,7 @@ export default function SchedulingCalendar() {
     fetchAvailableTimes();
   }, []);
 
+  // Efeito para enviar os dados do agendamento quando o estado shouldSendAppointment é true
   useEffect(() => {
     if (shouldSendAppointment) {
       const sendAppointmentData = async () => {
@@ -82,8 +96,10 @@ export default function SchedulingCalendar() {
 
           const data = await response.json();
           console.log("Appointment data sent successfully:", data);
+          alert("Consulta agendada com sucesso!"); // Alerta de sucesso
         } catch (error) {
           console.error("Error sending appointment data:", error);
+          alert("Falha ao agendar consulta. Tente novamente."); // Alerta de falha
         }
       };
 
@@ -92,19 +108,60 @@ export default function SchedulingCalendar() {
     }
   }, [shouldSendAppointment]);
 
+  // Função chamada quando um horário é clicado
   const handleTimeClick = (time) => {
-    const selectedDate = "2024-08-14"; // Mockado para testes
-
     setAppointmentDate({
-      year: "2024",
-      month: "08",
-      day: "12",
+      year: currentDate.getFullYear(), // Define o ano atual
+      month: currentDate.getMonth() + 1, // Define o mês atual (0-indexado, por isso +1)
+      day: appointmentDate.day, // Mantém o dia selecionado anteriormente
       hour: time.split(":")[0], // Hora extraída do formato HH:MM
       minutes: time.split(":")[1], // Minutos extraídos do formato HH:MM
-      seconds: 0,
+      seconds: 0, // Segundos definidos como 0
     });
-    setProfessionalId("8120938");
+    setProfessionalId("8120938"); // Mockado: Definindo o ID do profissional
     setShouldSendAppointment(true); // Definir o estado para enviar a consulta
+  };
+
+  // Função chamada quando um dia é clicado no calendário
+  const handleDateClick = (day) => {
+    setAppointmentDate({
+      ...appointmentDate,
+      year: currentDate.getFullYear(), // Define o ano atual
+      month: currentDate.getMonth() + 1, // Define o mês atual (0-indexado, por isso +1)
+      day: day, // Atualiza o dia selecionado
+    });
+  };
+
+  // Função para alterar o mês exibido no calendário
+  const handleMonthChange = (direction) => {
+    const newDate = new Date(currentDate);
+    newDate.setMonth(currentDate.getMonth() + direction); // Adiciona ou subtrai 1 mês
+    setCurrentDate(newDate); // Atualiza o estado com a nova data
+  };
+
+  // Função para gerar os dias do mês atual
+  const getDaysInMonth = () => {
+    const days = [];
+    const firstDay = new Date(
+      currentDate.getFullYear(),
+      currentDate.getMonth(),
+      1
+    );
+    const lastDay = new Date(
+      currentDate.getFullYear(),
+      currentDate.getMonth() + 1,
+      0
+    );
+
+    // Adiciona dias em branco antes do primeiro dia do mês
+    for (let i = 0; i < firstDay.getDay(); i++) {
+      days.push(null);
+    }
+    // Adiciona os dias do mês
+    for (let i = 1; i <= lastDay.getDate(); i++) {
+      days.push(i);
+    }
+    return days;
   };
 
   return (
@@ -112,58 +169,37 @@ export default function SchedulingCalendar() {
       <div className="datepicker">
         <div className="datepicker-top">
           <div className="month-selector">
-            <button className="arrow">
+            <button className="arrow" onClick={() => handleMonthChange(-1)}>
               <img src={arrow_left_icon} alt="Previous Month" />
             </button>
-            <span className="month-name">December 2020</span>
-            <button className="arrow">
+            <span className="month-name">
+              {currentDate.toLocaleString("default", { month: "long" })}{" "}
+              {currentDate.getFullYear()}
+            </span>
+            <button className="arrow" onClick={() => handleMonthChange(1)}>
               <img src={arrow_right_icon} alt="Next Month" />
             </button>
           </div>
         </div>
         <div className="datepicker-calendar">
+          <span className="day">Su</span>
           <span className="day">Mo</span>
           <span className="day">Tu</span>
           <span className="day">We</span>
           <span className="day">Th</span>
           <span className="day">Fr</span>
           <span className="day">Sa</span>
-          <span className="day">Su</span>
-          <button className="date faded">30</button>
-          <button className="date">1</button>
-          <button className="date">2</button>
-          <button className="date">3</button>
-          <button className="date">4</button>
-          <button className="date">5</button>
-          <button className="date">6</button>
-          <button className="date">7</button>
-          <button className="date">8</button>
-          <button className="date current-day">9</button>
-          <button className="date">10</button>
-          <button className="date">11</button>
-          <button className="date">12</button>
-          <button className="date">13</button>
-          <button className="date">14</button>
-          <button className="date">15</button>
-          <button className="date">16</button>
-          <button className="date">17</button>
-          <button className="date">18</button>
-          <button className="date">19</button>
-          <button className="date">20</button>
-          <button className="date">21</button>
-          <button className="date">22</button>
-          <button className="date">23</button>
-          <button className="date">24</button>
-          <button className="date">25</button>
-          <button className="date">26</button>
-          <button className="date">27</button>
-          <button className="date">28</button>
-          <button className="date">29</button>
-          <button className="date">30</button>
-          <button className="date">31</button>
-          <button className="date faded">1</button>
-          <button className="date faded">2</button>
-          <button className="date faded">3</button>
+          {getDaysInMonth().map((day, index) => (
+            <button
+              key={index}
+              className={`date ${
+                day === appointmentDate.day ? "selected-day" : ""
+              }`}
+              onClick={() => day && handleDateClick(day)}
+            >
+              {day || ""}
+            </button>
+          ))}
         </div>
       </div>
 

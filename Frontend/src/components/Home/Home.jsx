@@ -7,7 +7,6 @@ export const Home = () => {
   return (
     <>
       <MenuSidebar />
-      <ChatSidebar />
       <CardPsycho />
     </>
   );

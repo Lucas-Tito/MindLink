@@ -35,7 +35,7 @@ const MenuSidebar = () => {
                 position: "absolute",
                 top: "150px",
               }}
-              onClick={() => navigate("/professionalProfile")}
+              onClick={() => navigate("/")}
             />
           </li>
           <li>
@@ -47,6 +47,7 @@ const MenuSidebar = () => {
                 position: "absolute",
                 top: "230px",
               }}
+              onClick={() => navigate("/chat")}
             />
           </li>
           <li>
