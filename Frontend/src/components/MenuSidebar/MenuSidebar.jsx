@@ -7,8 +7,10 @@ import logoIcon from "../../assets/Logo.svg";
 import lupaIcon from "../../assets/lupaIcon.svg";
 import engineIcon from "../../assets/engine.svg";
 import cerebroIcon from "../../assets/cerebro.png";
+import { useNavigate } from "react-router-dom";
 
 const MenuSidebar = () => {
+  const navigate = useNavigate();
   return (
     <div>
       <div className="sidebar">
@@ -33,6 +35,7 @@ const MenuSidebar = () => {
                 position: "absolute",
                 top: "150px",
               }}
+              onClick={() => navigate("/professionalProfile")}
             />
           </li>
           <li>
@@ -55,6 +58,7 @@ const MenuSidebar = () => {
                 position: "absolute",
                 top: "300px",
               }}
+              onClick={() => navigate("/psychCalendar")}
             />
           </li>
 

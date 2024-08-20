@@ -1,47 +1,91 @@
 import React, { useState, useEffect } from "react";
 import "./style.css";
-import CardChat from "./CardChat"; // Componente CardChat
-import SearchBar from "../MenuSidebar/Search/Search"; // Componente SearchBar
-import firebase from "firebase/compat/app"; // Importação do Firebase compat
+import CardChat from "./CardChat";
+import SearchBar from "../MenuSidebar/Search/Search";
+import firebase from "firebase/compat/app";
+import "firebase/compat/auth";
+import "firebase/compat/firestore";
 
-// Inicialização da autenticação do Firebase
 const auth = firebase.auth();
+const firestore = firebase.firestore();
 
 const ChatSidebar = ({ onSelectUser }) => {
-  // Estados para armazenar a quantidade de mensagens e a lista de usuários
   const [qtdMensagens, setQtdMensagens] = useState(0);
   const [usuarios, setUsuarios] = useState([]);
+  const [patientId, setPatientId] = useState("");
 
-  // Função para lidar com a busca
   const handleSearch = (term) => {
     console.log("Termo de busca:", term);
   };
 
-  // useEffect para buscar os usuários da API
   useEffect(() => {
-    const fetchUsuarios = async () => {
+    const fetchUserTypeAndId = async () => {
       try {
-        // Faz uma requisição GET para a API
-        const response = await fetch("http://localhost:3000/mindlink/users");
+        const user = auth.currentUser;
+        if (user) {
+          const userResponse = await fetch(
+            `http://localhost:3000/mindlink/users/${user.uid}`
+          );
+          if (!userResponse.ok) {
+            throw new Error(`HTTP error! Status: ${userResponse.status}`);
+          }
+          const userData = await userResponse.json();
+          const isProfessional = userData.professionalType === true;
 
-        // Verifica se a resposta é válida
-        if (!response.ok) {
-          throw new Error(`HTTP error! Status: ${response.status}`);
+          const userConnectionQuery = await firestore
+            .collection("UsersConnections")
+            .where(
+              isProfessional ? "professionalId" : "patientId",
+              "==",
+              user.uid
+            )
+            .get();
+
+          if (!userConnectionQuery.empty) {
+            userConnectionQuery.forEach((doc) => {
+              const connectionData = doc.data();
+              const id = isProfessional
+                ? connectionData.patientId
+                : connectionData.professionalId;
+              setPatientId(id);
+            });
+          } else {
+            console.log("No connections found for this user.");
+          }
         }
-
-        // Converte a resposta para JSON
-        const data = await response.json();
-        console.log("Dados recebidos da API:", data); // Log dos dados recebidos
-        setUsuarios(data); // Atualiza o estado de usuários com os dados recebidos
-        setQtdMensagens(data.length - 1); // Atualiza o estado da quantidade de mensagens
       } catch (error) {
-        console.error("Erro ao buscar usuários:", error);
+        console.error("Erro ao buscar patientId:", error);
       }
     };
 
-    // Chama a função fetchUsuarios quando o componente é montado
-    fetchUsuarios();
+    fetchUserTypeAndId();
   }, []);
+
+  useEffect(() => {
+    const fetchUsuarios = async () => {
+      if (!patientId) return;
+
+      try {
+        const response = await fetch(
+          `http://localhost:3000/mindlink/users/${patientId}`
+        );
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        const data = await response.json();
+        console.log("Dados recebidos da API:", data);
+
+        const usuariosArray = Array.isArray(data) ? data : [data];
+        setUsuarios(usuariosArray);
+        setQtdMensagens(usuariosArray.length); // Atualiza a quantidade de mensagens com o tamanho do array
+      } catch (error) {
+        console.error("Erro ao buscar usuários:", error);
+        setQtdMensagens(0);
+      }
+    };
+
+    fetchUsuarios();
+  }, [patientId]);
 
   return (
     <div className="sidebar2 sidebar2-right">
@@ -51,18 +95,19 @@ const ChatSidebar = ({ onSelectUser }) => {
       </div>
       <ul>
         <li>
-          <SearchBar onSearch={handleSearch} />{" "}
-          {/* Renderiza a barra de busca */}
+          <SearchBar onSearch={handleSearch} />
         </li>
-        {usuarios.map(
-          (usuario, index) =>
-            // Renderiza o CardChat apenas se o ID do usuário não for igual ao ID do usuário atual
-            usuario?.uid !== auth.currentUser?.uid && (
-              <li key={index} onClick={() => onSelectUser(usuario)}>
-                <CardChat nome={usuario.name} photoURL={usuario.photoURL} />{" "}
-                {/* Renderiza o CardChat com o nome e foto do usuário */}
-              </li>
-            )
+        {Array.isArray(usuarios) && usuarios.length > 0 ? (
+          usuarios.map(
+            (usuario, index) =>
+              usuario?.uid !== auth.currentUser?.uid && (
+                <li key={index} onClick={() => onSelectUser(usuario)}>
+                  <CardChat nome={usuario.name} photoURL={usuario.photoURL} />
+                </li>
+              )
+          )
+        ) : (
+          <li>Nenhum usuário encontrado.</li>
         )}
       </ul>
     </div>

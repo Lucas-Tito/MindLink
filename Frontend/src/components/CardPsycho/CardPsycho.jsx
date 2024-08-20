@@ -43,7 +43,7 @@ export default function CardPsycho() {
 
         // Converte a resposta para JSON
         const data = await response.json();
-        console.log("Dados recebidos da API:", data); // Log dos dados recebidos
+        // console.log("Dados recebidos da API:", data); // Log dos dados recebidos
         setProfessionals(data); // Atualiza o estado de usuários com os dados recebidos
       } catch (error) {
         console.error("Erro ao buscar usuários:", error);

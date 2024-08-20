@@ -8,18 +8,17 @@ import senhaIcon from "../../assets/senha.svg";
 import { AuthContext } from "../../utils/ProtectedRoutes";
 import { useNavigate } from "react-router-dom";
 
-
-export default function Login () {
-  const {loginFunction} = useContext(AuthContext)
+export default function Login() {
+  const { loginFunction } = useContext(AuthContext);
   const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");  
-  const navigate = useNavigate()
+  const [password, setPassword] = useState("");
+  const navigate = useNavigate();
 
   const handleSignIn = async () => {
     try {
       await loginFunction(email, password);
       console.log("loged");
-      navigate("/")
+      navigate("/");
     } catch (error) {
       console.error("Error signing in with email and password:", error);
     }
@@ -34,7 +33,6 @@ export default function Login () {
             <img src={cerebro_icon} alt="logo" className="cerebro_icon" />
           </div>
           <div className="input-container">
-            <img src={personIcon} alt="Ícone de Email" className="input-icon" />
             <input
               type="email"
               placeholder="Email"
@@ -86,6 +84,4 @@ export default function Login () {
       />
     </div>
   );
-};
-
-
+}
