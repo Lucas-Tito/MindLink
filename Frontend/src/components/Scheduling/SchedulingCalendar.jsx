@@ -2,8 +2,33 @@ import React, { useState, useEffect } from "react";
 import "./scheduling_calendar.css";
 import arrow_left_icon from "../../assets/arrow_left.svg";
 import arrow_right_icon from "../../assets/arrow_right.svg";
+import { useLocation } from "react-router-dom";
+import firebase from "firebase/compat/app";
 
 export default function SchedulingCalendar() {
+  const auth = firebase.auth();
+  // Estado para armazenar os horários disponíveis
+  const [availableTimes, setAvailableTimes] = useState([]);
+
+  // Estados para armazenar informações do paciente e profissional
+  const [patientName, setPatientName] = useState("");
+  const [patientId, setPatientId] = useState("");
+
+  // Estado para controlar o envio dos dados do agendamento
+  const [shouldSendAppointment, setShouldSendAppointment] = useState(false);
+
+  // Estado para gerenciar a data atual usada na navegação do calendário
+  const [currentDate, setCurrentDate] = useState(new Date());
+
+  const location = useLocation();
+  const [professional, setProfessional] = useState(null);
+
+  useEffect(() => {
+    if (location.state) {
+      setProfessional(location.state.data);
+    }
+  }, [location.state]);
+
   // Estado para armazenar a data do agendamento
   const [appointmentDate, setAppointmentDate] = useState({
     year: null,
@@ -14,22 +39,7 @@ export default function SchedulingCalendar() {
     seconds: 0,
   });
 
-  // Estado para armazenar os horários disponíveis
-  const [availableTimes, setAvailableTimes] = useState([]);
-
-  // Estados para armazenar informações do paciente e profissional
-  const [patientName, setPatientName] = useState("");
-  const [patientId, setPatientId] = useState("");
-  const [professionalName, setProfessionalName] = useState("Dr. Smith"); // Mockado
-  const [professionalId, setProfessionalId] = useState(); // Mockado
-
-  // Estado para controlar o envio dos dados do agendamento
-  const [shouldSendAppointment, setShouldSendAppointment] = useState(false);
-
-  // Estado para gerenciar a data atual usada na navegação do calendário
-  const [currentDate, setCurrentDate] = useState(new Date());
-
-  const user = "2WRBFGbLRaWHnXmMQ9Tmf68gx2v2"; // ID do usuário (mockado)
+  const user = auth.currentUser.uid;
 
   // Efeito para buscar dados do paciente quando o componente é montado
   useEffect(() => {
@@ -80,8 +90,8 @@ export default function SchedulingCalendar() {
               body: JSON.stringify({
                 patientId: patientId,
                 patientName: patientName,
-                professionalId: professionalId,
-                professionalName: professionalName,
+                professionalId: professional.uid,
+                professionalName: professional.name,
                 appointmentDate: appointmentDate,
               }),
             }
@@ -96,6 +106,10 @@ export default function SchedulingCalendar() {
 
           const data = await response.json();
           console.log("Appointment data sent successfully:", data);
+
+          // Chama a função para criar uma nova conexão após o agendamento
+          await createUserConnection(patientId, professional?.uid);
+
           alert("Consulta agendada com sucesso!"); // Alerta de sucesso
         } catch (error) {
           console.error("Error sending appointment data:", error);
@@ -108,6 +122,38 @@ export default function SchedulingCalendar() {
     }
   }, [shouldSendAppointment]);
 
+  const createUserConnection = async (patientId, professionalId) => {
+    try {
+      const response = await fetch(
+        "http://localhost:3000/mindlink/usersconnection",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            PatientId: patientId,
+            ProfessionalId: professionalId,
+            ConnectionDate: new Date().toISOString(), // ou outra data se necessário
+          }),
+        }
+      );
+
+      if (!response.ok) {
+        const errorText = await response.text();
+        throw new Error(
+          `Network response was not ok: ${response.status} - ${errorText}`
+        );
+      }
+
+      const data = await response.json();
+      console.log("User connection created successfully:", data);
+    } catch (error) {
+      console.error("Error creating user connection:", error);
+      alert("Falha ao criar conexão. Tente novamente."); // Alerta de falha
+    }
+  };
+
   // Função chamada quando um horário é clicado
   const handleTimeClick = (time) => {
     setAppointmentDate({
@@ -118,7 +164,6 @@ export default function SchedulingCalendar() {
       minutes: time.split(":")[1], // Minutos extraídos do formato HH:MM
       seconds: 0, // Segundos definidos como 0
     });
-    setProfessionalId("8120938"); // Mockado: Definindo o ID do profissional
     setShouldSendAppointment(true); // Definir o estado para enviar a consulta
   };
 

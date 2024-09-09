@@ -1,7 +1,7 @@
 import React from "react";
 import "./style.css";
 
-const CardChat = ({ nome, photoURL }) => {
+const CardChat = ({ nome, photoURL, lastMessage, lastMessageTime }) => {
   return (
     <div className="whatsapp-card">
       {photoURL ? (
@@ -12,10 +12,10 @@ const CardChat = ({ nome, photoURL }) => {
       <div className="message-info">
         <div className="details">
           <p>{nome}</p>
-          <span>14:30</span>
+          <span>{lastMessageTime || "Sem horário"}</span>
         </div>
         <div className="message">
-          <span>amongus</span>
+          <span>{lastMessage || "Nenhuma mensagem"}</span>
         </div>
       </div>
     </div>

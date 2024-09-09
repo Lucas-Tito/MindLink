@@ -4,6 +4,7 @@
   justify-content: center; /* Centraliza os cartões no container */
   gap: 30px; /* Adiciona espaçamento entre os cartões */
   margin-left: 100px;
+  margin-top: 30px;
 }
 
 .cardPsycho {

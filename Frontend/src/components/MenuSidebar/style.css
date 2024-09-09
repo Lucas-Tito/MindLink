@@ -29,6 +29,10 @@
 .sidebar ul li {
   padding: 10px;
 }
+.sidebar ul li img:hover {
+  transform: scale(1.1); /* Aumenta o tamanho do ícone */
+  filter: brightness(1.2); /* Aumenta o brilho do ícone */
+}
 
 /* Estilo dos links dos itens de menu */
 .sidebar ul li a {
