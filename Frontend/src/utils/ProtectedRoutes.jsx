@@ -15,6 +15,7 @@ export default function ProtectedRoutes(){
         try {
           await auth.signInWithEmailAndPassword(login, password);
           setUser({ name: login, isAuthenticated: true });
+          
         } catch (error) {
           console.error("Error signing in with email and password:", error);
         }

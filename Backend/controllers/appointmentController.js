@@ -1,4 +1,5 @@
 import admin from "../db/connection.js";
+import week from "../utils/Start-End-ofWeek.js";
 
 const appointmentController = {
   getAllAppointments: async (request, response) => {
@@ -27,6 +28,36 @@ const appointmentController = {
       .get();
     console.log(appointmentSelected);
     response.json(appointmentSelected.data());
+  },
+
+  getAppointmentsByProfessionalIdInCurrentWeek: async (request, response) => {
+    console.log("Get Appointments by Professional Id in current week");
+    console.log(request.params);
+  
+    try {
+      const appointmentsRef = admin.firestore().collection("Appointments");
+      const snapshot = await appointmentsRef
+        .where("professionalId", "==", request.params.professionalId)
+        .where("appointmentDate.year", "==", week.today.getFullYear()) // Same year
+        .where("appointmentDate.month", "==", week.today.getMonth() + 1) // Same month (Firestore months are 1-based)
+        .where("appointmentDate.day", ">=", week.start.getDate()) // Greater or equal to start of the week
+        .where("appointmentDate.day", "<=", week.end.getDate()) // Less or equal to end of the week
+        .get();
+  
+      if (snapshot.empty) {
+        return response.status(404).json({ message: "No appointments found for this professional in the current week" });
+      }
+  
+      const appointments = [];
+      snapshot.forEach(doc => {
+        appointments.push({ id: doc.id, ...doc.data() });
+      });
+  
+      response.json(appointments);
+    } catch (error) {
+      console.error("Error getting appointments: ", error);
+      response.status(500).json({ message: "Error getting appointments" });
+    }
   },
 
   createAppointment: async (request, response) => {
