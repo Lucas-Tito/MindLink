@@ -1,13 +1,19 @@
 import React from "react";
+import { useContext } from "react";
+import { AuthContext } from "../../utils/ProtectedRoutes";
 import MenuSidebar from "../MenuSidebar/MenuSidebar";
-import ChatSidebar from "../ChatSidebar/ChatSidebar";
 import CardPsycho from "../CardPsycho/CardPsycho";
+import Calendar from "../Calendar/Calendar";
 
 export const Home = () => {
+  const {user} = useContext(AuthContext)
   return (
     <>
       <MenuSidebar />
-      <CardPsycho />
+      {user.isProfessional? 
+        <Calendar/>
+        : <CardPsycho />}
+      
     </>
   );
 };
