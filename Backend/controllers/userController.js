@@ -1,6 +1,7 @@
 import admin from "../db/connection.js";
 
 const userController = {
+
   getAllUsers: async (request, response) => {
     console.log("Get All User");
 
@@ -17,6 +18,7 @@ const userController = {
       });
   },
 
+  //gets all professional users
   getProfessionalUser: async (request,response) =>
     {
       try
@@ -33,6 +35,28 @@ const userController = {
           response.status(500).json({error: "Erro ao pegar usuários do tipo profissional"});
       }  
     },
+
+  checkIfUserIsProfessional: async (request, response) => {
+      try {
+        console.log("Checking if user is professional");
+        const userRef = await admin
+          .firestore()
+          .collection("Users")
+          .doc(request.params.id)
+          .get();
+    
+        if (!userRef.exists) {
+          return response.status(404).json({ message: "User not found" });
+        }
+    
+        const userData = userRef.data();
+        const isProfessional = !!userData.professionalType; // Converte o valor para booleano
+        return response.json({ isProfessional });
+      } catch (error) {
+        console.error("Error checking professional type:", error);
+        return response.status(500).json({ message: "Internal server error" });
+      }
+  },  
 
   getUserById: async (request, response) => {
     console.log("Get User by Id");

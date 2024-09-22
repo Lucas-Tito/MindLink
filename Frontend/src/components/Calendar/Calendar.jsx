@@ -1,5 +1,6 @@
-import React, { useEffect } from "react"
+import React, { useEffect, useState } from "react"
 import "./calendar.css"
+import firebase from "firebase/compat/app";
 import mock_array from "./mock_array"
 import currentWeekDays from "./utils/current_week_days"
 import convertHourFormat from "./utils/convertHourFormat"
@@ -8,6 +9,8 @@ import arrow_right_icon from "../../assets/arrow_right.svg"
 import getCurrentMonth from "./utils/getCurrentMonth"
 
 export default function Calendar() {
+    const auth = firebase.auth();
+    const [appointments, setAppointments] = useState([]); 
 
     useEffect(() => {
         const tabela = document.querySelector("#appointments_table")
@@ -56,7 +59,27 @@ export default function Calendar() {
      * first four rows, since each hours equals 4 tds and each td equals 15 minutes.
      */
     useEffect(() => {
-        const appointments = mock_array
+        //gets all appointments in the current week of a specific professional
+        const fetchAppointments = async () => {
+            try {
+                const userId = auth.currentUser.uid
+                const response = await fetch(`http://localhost:3000/mindlink/appointments/professional/${userId}`);
+                if (!response.ok) {
+                    throw new Error("Failed to fetch appointments");
+                }
+                const data = await response.json();
+                setAppointments(data);
+            } catch (error) {
+                console.error("Error fetching appointments:", error);
+            }
+        };
+        fetchAppointments();
+        console.log("appointments:");
+        
+        console.log(appointments);
+        
+        
+        
         const tabela = document.querySelector("#appointments_table")
         if (tabela) {
             appointments.forEach(session => {
@@ -64,7 +87,7 @@ export default function Calendar() {
                  * the following calculation gets the last row of the selected hour,
                  * so it's necessary to also go back three rows.
                  */
-                let hour = parseInt(session.date.hour.split(":")[0])
+                let hour = parseInt(session.appointmentDate.hour)
                 let targetRow = [
                     document.querySelectorAll("tr")[(hour-7)*4],
                     document.querySelectorAll("tr")[((hour-7)*4)-1],
@@ -100,7 +123,7 @@ export default function Calendar() {
                     }
 
                     //gets a index from 0-6 in which 0 is sunday
-                    let dayOfWeek = new Date(`${session.date.year}-${session.date.month}-${session.date.day}`).getDay()
+                    let dayOfWeek = new Date(`${session.appointmentDate.year}-${session.appointmentDate.month}-${session.appointmentDate.day}`).getDay()
 
 
 
@@ -132,10 +155,10 @@ export default function Calendar() {
                         targetCell[1].classList.add("session_active")
 
                         targetCell[2].classList.add("session_active")
-                        targetCell[2].textContent = convertHourFormat(session.date.hour)
+                        targetCell[2].textContent = convertHourFormat(session.appointmentDate.hour + session.appointmentDate.minutes)
 
                         targetCell[3].classList.add("session_active")
-                        targetCell[3].textContent = session.patient
+                        targetCell[3].textContent = session.patientName
                     }
 
                     /**

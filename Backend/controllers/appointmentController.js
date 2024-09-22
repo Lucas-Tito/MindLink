@@ -36,6 +36,8 @@ const appointmentController = {
   
     try {
       const appointmentsRef = admin.firestore().collection("Appointments");
+      console.log("week start " +week.start +" week end "+  week.end);
+      
       const snapshot = await appointmentsRef
         .where("professionalId", "==", request.params.professionalId)
         .where("appointmentDate.year", "==", week.today.getFullYear()) // Same year
@@ -70,6 +72,9 @@ const appointmentController = {
       appointmentDate: request.body.appointmentDate,
     };
 
+    console.log("date: " + appointment.appointmentDate);
+    
+
     try {
       const dayNames = [
         "Sunday",
@@ -80,6 +85,8 @@ const appointmentController = {
         "Friday",
         "Saturday",
       ];
+      console.log(appointment.appointmentDate.year + " " + appointment.appointmentDate.month + " " + appointment.appointmentDate.day);
+      
       const weekDayValue = new Date(
         appointment.appointmentDate.year,
         appointment.appointmentDate.month - 1,
@@ -95,7 +102,7 @@ const appointmentController = {
       );
 
       //verificação da disponibilidade
-      console.log(dayNames[weekDayValue]);
+      console.log("dayVaule " + weekDayValue + " dayName " + dayNames[weekDayValue]);
       const availabilityQuery = await admin
         .firestore()
         .collection("Availability")

@@ -8,7 +8,7 @@ export const AuthContext = createContext()
 
 export default function ProtectedRoutes(){
 
-    const [user, setUser] = useState({name:"", isAuthenticated:false})
+    const [user, setUser] = useState({name: "", isAuthenticated: false, isProfessional: false})
     const auth = firebase.auth();
     
     const loginFunction = async (login, password) => {
@@ -16,6 +16,27 @@ export default function ProtectedRoutes(){
           await auth.signInWithEmailAndPassword(login, password);
           setUser({ name: login, isAuthenticated: true });
           
+
+          const checkIsProfessional = async () => {
+            try {
+                const userId = auth.currentUser.uid
+                const response = await fetch(`http://localhost:3000/mindlink/users/checkIfIsProfessional/${userId}`);
+                if (!response.ok) {
+                    throw new Error("Failed to fetch appointments");
+                }
+                const data = await response.json();
+                setUser((prevData)=>{return {
+                  ...prevData,
+                  isProfessional: data
+                }
+              });
+            } catch (error) {
+                console.error("Error fetching appointments:", error);
+            }
+        };
+        checkIsProfessional();
+        
+
         } catch (error) {
           console.error("Error signing in with email and password:", error);
         }
