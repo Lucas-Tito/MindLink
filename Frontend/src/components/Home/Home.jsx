@@ -7,6 +7,9 @@ import Calendar from "../Calendar/Calendar";
 
 export const Home = () => {
   const {user} = useContext(AuthContext)
+
+  console.log(user);
+  
   return (
     <>
       <MenuSidebar />
