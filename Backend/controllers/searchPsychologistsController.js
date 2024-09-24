@@ -23,7 +23,8 @@ const searchPsychologistsController = {
             return (
               user.name?.toLowerCase().includes(searchLower) || 
               user.lastname?.toLowerCase().includes(searchLower) || 
-              user.bio?.toLowerCase().includes(searchLower)
+              user.bio?.toLowerCase().includes(searchLower) ||
+              user.title?.toLowerCase().includes(searchLower)
             );
           });
   
