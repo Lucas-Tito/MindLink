@@ -1,4 +1,5 @@
 import admin from "../db/connection.js";
+import week from "../utils/Start-End-ofWeek.js";
 
 const appointmentController = {
   getAllAppointments: async (request, response) => {
@@ -29,6 +30,40 @@ const appointmentController = {
     response.json(appointmentSelected.data());
   },
 
+  getAppointmentsByProfessionalIdInCurrentWeek: async (request, response) => {
+    console.log("Get Appointments by Professional Id in current week");
+    console.log(request.params);
+  
+    try {
+      const appointmentsRef = admin.firestore().collection("Appointments");
+      console.log("week start " +week.start +" week end "+  week.end);
+      
+      const snapshot = await appointmentsRef
+        .where("professionalId", "==", request.params.professionalId)
+        .where("appointmentDate.year", "==", week.today.getFullYear()) // Same year
+        .where("appointmentDate.month", "==", week.today.getMonth() + 1) // Same month (Firestore months are 1-based)
+        .where("appointmentDate.day", ">=", week.start.getDate()) // Greater or equal to start of the week
+        .where("appointmentDate.day", "<=", week.end.getDate()) // Less or equal to end of the week
+        .get();
+  
+      if (snapshot.empty) {
+        return response.status(404).json({ message: "No appointments found for this professional in the current week" });
+      }
+  
+      const appointments = [];
+      snapshot.forEach(doc => {
+        appointments.push({ id: doc.id, ...doc.data() });
+      });
+      
+      console.log(appointments);
+      
+      response.json(appointments);
+    } catch (error) {
+      console.error("Error getting appointments: ", error);
+      response.status(500).json({ message: "Error getting appointments" });
+    }
+  },
+
   createAppointment: async (request, response) => {
     console.log("Create Appointment");
     const appointment = {
@@ -38,6 +73,9 @@ const appointmentController = {
       professionalId: request.body.professionalId,
       appointmentDate: request.body.appointmentDate,
     };
+
+    console.log("date: " + appointment.appointmentDate);
+    
 
     try {
       const dayNames = [
@@ -49,6 +87,8 @@ const appointmentController = {
         "Friday",
         "Saturday",
       ];
+      console.log(appointment.appointmentDate.year + " " + appointment.appointmentDate.month + " " + appointment.appointmentDate.day);
+      
       const weekDayValue = new Date(
         appointment.appointmentDate.year,
         appointment.appointmentDate.month - 1,
@@ -64,7 +104,7 @@ const appointmentController = {
       );
 
       //verificação da disponibilidade
-      console.log(dayNames[weekDayValue]);
+      console.log("dayVaule " + weekDayValue + " dayName " + dayNames[weekDayValue]);
       const availabilityQuery = await admin
         .firestore()
         .collection("Availability")

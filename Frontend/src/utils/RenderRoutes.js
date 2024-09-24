@@ -10,7 +10,12 @@ export default function RenderRoutes() {
     return(
         <Routes>
         {navigation.map((route, i) => {
-          if (route.isPrivate) {
+          /**
+           * verifies if the current route of the array is private
+           * if it is, it alsos verifies if the user is authenticated
+           */
+
+          if (route.isPrivate && !route.isProfessionalFlow) {
             return (
               <Route
                 key={i}
@@ -24,7 +29,11 @@ export default function RenderRoutes() {
                 }
               />
             );
-          } else {
+          } 
+          else if(route.isProfessionalFlow && user.isProfessional){
+            return <Route key={i} path={route.path} element={route.element} />;
+          }
+          else {
             return <Route key={i} path={route.path} element={route.element} />;
           }
         })}
