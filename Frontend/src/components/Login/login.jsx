@@ -2,11 +2,9 @@ import React, { useContext, useState } from "react";
 import "./style.css";
 import cerebro_icon from "../../assets/cerebro.png";
 import imagem_consulta from "../../assets/imagemConsulta.png";
-import personIcon from "../../assets/personIcon.svg";
 import ajudaIcon from "../../assets/ajuda.png";
-import senhaIcon from "../../assets/senha.svg";
 import { AuthContext } from "../../utils/ProtectedRoutes";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom"; // Importa o Link
 
 export default function Login() {
   const { loginFunction } = useContext(AuthContext);
@@ -34,6 +32,7 @@ export default function Login() {
           </div>
           <div className="input-container">
             <input
+              className="input-email"
               type="email"
               placeholder="Email"
               name="email"
@@ -41,8 +40,9 @@ export default function Login() {
               onChange={(e) => setEmail(e.target.value)}
             />
           </div>
-          <div>
+          <div className="input-container">
             <input
+              className="input-password"
               type="password"
               placeholder="Senha"
               name="password"
@@ -50,9 +50,12 @@ export default function Login() {
               onChange={(e) => setPassword(e.target.value)}
             />
           </div>
-          <button type="button" className="btn1" onClick={handleSignIn}>
+          <button type="button" className="btnLogin" onClick={handleSignIn}>
             ENTRAR
           </button>
+          <Link to="/register" className="linkRegister">
+            Criar conta?
+          </Link>
         </div>
       </div>
       <div className="image-container">
@@ -67,8 +70,7 @@ export default function Login() {
           height: "60px",
           background: "#8F1EA8",
           backgroundImage: `url(${ajudaIcon})`,
-          borderRadius:
-            "50% 0 0 50%" /* Apenas a parte esquerda é um semicírculo */,
+          borderRadius: "50% 0 0 50%",
         }}
       ></div>
       <img

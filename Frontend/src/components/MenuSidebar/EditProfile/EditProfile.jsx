@@ -19,9 +19,10 @@ export const EditProfile = () => {
     education: "", // Campo education
   });
   const auth = firebase.auth();
-  const [photo, setPhoto] = useState(null); // Estado para armazenar a foto
+  const [photoURL, setPhotoURL] = useState(null); // Estado para armazenar a foto
   const [photoPreview, setPhotoPreview] = useState(null); // Para pré-visualizar a foto
-  const userId = auth.currentUser.uid; // Obtendo o ID do usuário autenticado
+  const userId = auth.currentUser?.uid; // Obtendo o ID do usuário autenticado
+  const user = auth.currentUser; // Obtém o usuário atual
 
   // Função para buscar os dados do Firestore
   useEffect(() => {
@@ -51,41 +52,61 @@ export const EditProfile = () => {
     });
   };
 
-  const handleSubmit = (e) => {
+  const handlePhotoChange = (e) => {
+    if (e.target.files[0]) {
+      setPhotoURL(e.target.files[0]); // Define a nova foto selecionada
+      setPhotoPreview(URL.createObjectURL(e.target.files[0])); // Atualiza a pré-visualização da foto
+    }
+  };
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (photo) {
-      // Faz o upload da foto no Firebase Storage
-      const storageRef = storage.ref();
-      const photoRef = storageRef.child(`profilePictures/${photo.name}`);
-      photoRef
-        .put(photo)
-        .then(() => {
-          return photoRef.getDownloadURL();
-        })
-        .then((url) => {
-          // Atualiza o formData com o novo URL da foto
-          const updatedData = {
-            ...formData,
-            photoURL: url,
-          };
-          setFormData(updatedData);
+    try {
+      // Verifica se há uma foto para fazer upload
+      let downloadURL = formData.photoURL || null; // Mantém o URL antigo se não houver nova foto
 
-          // Atualiza os dados no Firestore
-          firestore
-            .collection("Users")
-            .doc(userId)
-            .set(updatedData, { merge: true });
+      if (photoURL) {
+        // Faz o upload da foto para o Firebase Storage
+        const storageRef = storage.ref();
+        const fileRef = storageRef.child(
+          `user-photos/${user.uid}/${photoURL.name}`
+        );
+        await fileRef.put(photoURL);
 
-          console.log("Foto enviada com sucesso!", url);
-        })
-        .catch((error) => {
-          console.error("Erro ao fazer upload da foto:", error);
+        // Obtém a URL de download da foto
+        downloadURL = await fileRef.getDownloadURL();
+
+        // Atualiza o perfil do usuário no Firebase Authentication com a foto
+        await user.updateProfile({
+          photoURL: downloadURL,
         });
-    } else {
-      // Atualiza os dados no Firestore sem mudar a foto
-      firestore.collection("Users").doc(userId).set(formData, { merge: true });
-      console.log("Dados do formulário:", formData);
+      }
+
+      // Atualiza ou cria um documento correspondente no Firestore
+      const updatedData = {
+        uid: user?.uid,
+        name: formData.name || "", // Definindo um valor padrão
+        last_name: formData.last_name || "", // Definindo um valor padrão
+        email: formData.email || "", // Definindo um valor padrão
+        bio: formData.bio || "", // Definindo um valor padrão
+        address: formData.address || "", // Definindo um valor padrão
+        contact: formData.contact || "", // Definindo um valor padrão
+        city: formData.city || "", // Definindo um valor padrão
+        state: formData.state || "AC", // Definindo um valor padrão
+        title: formData.title || "", // Definindo um valor padrão
+        education: formData.education || "", // Definindo um valor padrão
+        photoURL: downloadURL, // Armazena a URL de download da foto no Firestore
+      };
+
+      await firestore
+        .collection("Users")
+        .doc(user.uid)
+        .set(updatedData, { merge: true });
+
+      console.log("Perfil atualizado com sucesso!");
+    } catch (error) {
+      console.error("Erro ao atualizar o perfil:", error);
     }
   };
 
@@ -111,6 +132,16 @@ export const EditProfile = () => {
           />
         </div>
         <form className="form-container1" onSubmit={handleSubmit}>
+          <div className="form-group">
+            <label htmlFor="photo">Alterar Foto de Perfil</label>
+            <input
+              type="file"
+              id="photo"
+              accept="image/*"
+              onChange={handlePhotoChange}
+            />
+          </div>
+
           <div className="form-group">
             <div style={{ display: "flex", gap: "217px" }}>
               <label htmlFor="name">Primeiro Nome</label>
@@ -254,27 +285,13 @@ export const EditProfile = () => {
             </div>
           </div>
 
-          <button
-            type="submit"
-            className="btn-submit"
-            style={{ color: "white", background: "#615EF0" }}
-          >
+          <button className="form-button" type="submit">
             Salvar
-          </button>
-          <button
-            type="button"
-            className="btn-submit"
-            style={{
-              color: "#615EF0",
-              background: "white",
-              marginLeft: "10px",
-              border: "1px solid #615EF0",
-            }}
-          >
-            Cancelar
           </button>
         </form>
       </div>
     </div>
   );
 };
+
+export default EditProfile;

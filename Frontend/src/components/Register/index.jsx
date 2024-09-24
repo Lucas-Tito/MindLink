@@ -3,7 +3,7 @@ import firebase from "firebase/compat/app";
 import "firebase/compat/auth";
 import "firebase/compat/firestore";
 import { storage } from "../../firebase";
-
+import { useNavigate, Link } from "react-router-dom"; // Importa o Link
 import "./style.css";
 import cerebro_icon from "../../assets/cerebro.png";
 import imagem_consulta from "../../assets/imagemConsulta.png";
@@ -12,6 +12,8 @@ import ajudaIcon from "../../assets/ajuda.png";
 //import senhaIcon from "../../assets/senha.svg";
 
 const Register = () => {
+  const navigate = useNavigate();
+
   const [isChecked, setIsChecked] = useState(false);
   const [formData, setFormData] = useState({
     name: "",
@@ -97,6 +99,7 @@ const Register = () => {
       }
 
       alert("Usuário cadastrado com sucesso!");
+      navigate("/login");
 
       // Limpa o estado local do formulário após o cadastro
       setFormData({
