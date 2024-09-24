@@ -2,6 +2,7 @@ import Calendar from "../components/Calendar/Calendar";
 import ChatRoom from "../components/Chat/ChatRoom";
 import { Home } from "../components/Home/Home";
 import Login from "../components/Login/login";
+import { EditProfile } from "../components/MenuSidebar/EditProfile/EditProfile";
 import SchedulingCalendar from "../components/Scheduling/SchedulingCalendar";
 
 export const navigation = [
@@ -19,5 +20,11 @@ export const navigation = [
     name: "Psychologist Calendar",
     element: <Calendar />,
     isPrivate: true,
+  },
+  {
+    path: "/editProfile",
+    name: "edit",
+    element: <EditProfile />,
+    isPrivate: false,
   },
 ];

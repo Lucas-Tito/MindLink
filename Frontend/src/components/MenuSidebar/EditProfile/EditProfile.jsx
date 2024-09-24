@@ -1,12 +1,13 @@
-import React, { useState } from "react";
-import Sidebar from "../Sidebar";
-import SidebarSettings from "../MenuSidebar/SidebarSettings";
-import lazin from "../../assets/lazin.png";
-
+import React, { useState, useEffect } from "react";
+import { firestore, storage } from "../../../firebase"; // Importando a configuração do Firebase
+import firebase from "firebase/compat/app";
+import SidebarSettings from "../SidebarSettings/SidebarSettings";
 import "./style.css";
+import MenuSidebar from "../MenuSidebar";
+
 export const EditProfile = () => {
   const [formData, setFormData] = useState({
-    first_name: "",
+    name: "",
     last_name: "",
     email: "",
     bio: "",
@@ -14,7 +15,33 @@ export const EditProfile = () => {
     contact: "",
     city: "",
     state: "AC", // Estado padrão (Acre)
+    title: "", // Campo title
+    education: "", // Campo education
   });
+  const auth = firebase.auth();
+  const [photo, setPhoto] = useState(null); // Estado para armazenar a foto
+  const [photoPreview, setPhotoPreview] = useState(null); // Para pré-visualizar a foto
+  const userId = auth.currentUser.uid; // Obtendo o ID do usuário autenticado
+
+  // Função para buscar os dados do Firestore
+  useEffect(() => {
+    if (userId) {
+      const userRef = firestore.collection("Users").doc(userId); // Ajuste o caminho conforme a sua coleção
+      userRef
+        .get()
+        .then((doc) => {
+          if (doc.exists) {
+            setFormData(doc.data()); // Preenche os campos do formulário com os dados do Firestore
+            setPhotoPreview(doc.data().photoURL); // Define a foto de perfil se existir
+          } else {
+            console.log("Nenhum dado encontrado para esse usuário.");
+          }
+        })
+        .catch((error) => {
+          console.error("Erro ao buscar os dados do Firestore:", error);
+        });
+    }
+  }, [userId]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -26,14 +53,46 @@ export const EditProfile = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Aqui você pode adicionar a lógica para enviar os dados do formulário
-    console.log("Dados do formulário:", formData);
+
+    if (photo) {
+      // Faz o upload da foto no Firebase Storage
+      const storageRef = storage.ref();
+      const photoRef = storageRef.child(`profilePictures/${photo.name}`);
+      photoRef
+        .put(photo)
+        .then(() => {
+          return photoRef.getDownloadURL();
+        })
+        .then((url) => {
+          // Atualiza o formData com o novo URL da foto
+          const updatedData = {
+            ...formData,
+            photoURL: url,
+          };
+          setFormData(updatedData);
+
+          // Atualiza os dados no Firestore
+          firestore
+            .collection("Users")
+            .doc(userId)
+            .set(updatedData, { merge: true });
+
+          console.log("Foto enviada com sucesso!", url);
+        })
+        .catch((error) => {
+          console.error("Erro ao fazer upload da foto:", error);
+        });
+    } else {
+      // Atualiza os dados no Firestore sem mudar a foto
+      firestore.collection("Users").doc(userId).set(formData, { merge: true });
+      console.log("Dados do formulário:", formData);
+    }
   };
+
   return (
     <div>
-      <Sidebar />
+      <MenuSidebar />
       <SidebarSettings />
-
       <div className="form1">
         <div
           style={{
@@ -46,24 +105,24 @@ export const EditProfile = () => {
         >
           <h2>Edit Profile</h2>
           <img
-            src={lazin}
+            src={photoPreview || formData.photoURL} // Mostra a pré-visualização ou a foto atual
             style={{ width: "60px", height: "60px", borderRadius: "100%" }}
+            alt="Profile"
           />
         </div>
         <form className="form-container1" onSubmit={handleSubmit}>
           <div className="form-group">
             <div style={{ display: "flex", gap: "217px" }}>
-              <label htmlFor="first_name">Primeiro Nome</label>
+              <label htmlFor="name">Primeiro Nome</label>
               <label htmlFor="last_name">Último Nome</label>
             </div>
-
             <div className="formdiv1">
               <input
                 className="input1"
                 type="text"
-                id="first_name"
-                name="first_name"
-                value={formData.first_name}
+                id="name"
+                name="name"
+                value={formData.name}
                 onChange={handleChange}
               />
               <input
@@ -84,6 +143,28 @@ export const EditProfile = () => {
               id="email"
               name="email"
               value={formData.email}
+              onChange={handleChange}
+            />
+          </div>
+
+          <div className="form-group">
+            <label htmlFor="title">Título</label>
+            <input
+              type="text"
+              id="title"
+              name="title"
+              value={formData.title}
+              onChange={handleChange}
+            />
+          </div>
+
+          <div className="form-group">
+            <label htmlFor="education">Educação</label>
+            <input
+              type="text"
+              id="education"
+              name="education"
+              value={formData.education}
               onChange={handleChange}
             />
           </div>
@@ -141,8 +222,34 @@ export const EditProfile = () => {
                 value={formData.state}
                 onChange={handleChange}
               >
+                <option value="">Selecione um estado</option>
                 <option value="AC">Acre</option>
-                {/* Opções dos outros estados */}
+                <option value="AL">Alagoas</option>
+                <option value="AP">Amapá</option>
+                <option value="AM">Amazonas</option>
+                <option value="BA">Bahia</option>
+                <option value="CE">Ceará</option>
+                <option value="DF">Distrito Federal</option>
+                <option value="ES">Espírito Santo</option>
+                <option value="GO">Goiás</option>
+                <option value="MA">Maranhão</option>
+                <option value="MT">Mato Grosso</option>
+                <option value="MS">Mato Grosso do Sul</option>
+                <option value="MG">Minas Gerais</option>
+                <option value="PA">Pará</option>
+                <option value="PB">Paraíba</option>
+                <option value="PR">Paraná</option>
+                <option value="PE">Pernambuco</option>
+                <option value="PI">Piauí</option>
+                <option value="RJ">Rio de Janeiro</option>
+                <option value="RN">Rio Grande do Norte</option>
+                <option value="RS">Rio Grande do Sul</option>
+                <option value="RO">Rondônia</option>
+                <option value="RR">Roraima</option>
+                <option value="SC">Santa Catarina</option>
+                <option value="SP">São Paulo</option>
+                <option value="SE">Sergipe</option>
+                <option value="TO">Tocantins</option>
               </select>
             </div>
           </div>
@@ -155,7 +262,7 @@ export const EditProfile = () => {
             Salvar
           </button>
           <button
-            type="submit"
+            type="button"
             className="btn-submit"
             style={{
               color: "#615EF0",
