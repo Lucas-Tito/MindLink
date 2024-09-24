@@ -52,13 +52,7 @@ export default function Calendar() {
         }
     }, [])
 
-    /**
-     * For a better understanding of the following code I will hereby present an example:
-     * If you want to make black the cell corresponding to monday at 7am, you need to
-     * select the first td (cell) after the td corresponding to the hour information in the 
-     * first four rows, since each hours equals 4 tds and each td equals 15 minutes.
-     */
-    useEffect(() => {
+    useEffect(()=>{
         //gets all appointments in the current week of a specific professional
         const fetchAppointments = async () => {
             try {
@@ -68,108 +62,135 @@ export default function Calendar() {
                     throw new Error("Failed to fetch appointments");
                 }
                 const data = await response.json();
-                setAppointments(data);
+
+                console.log("data useEffec fetchAppointments");
+                console.log(data);
+
+                setAppointments(data)
+                console.log("appointments useEffec fetchAppointments:");
+
+                console.log(appointments);
             } catch (error) {
                 console.error("Error fetching appointments:", error);
             }
         };
         fetchAppointments();
-        console.log("appointments:");
-        
-        console.log(appointments);
-        
-        
-        
-        const tabela = document.querySelector("#appointments_table")
-        if (tabela) {
-            appointments.forEach(session => {
-                /**
-                 * the following calculation gets the last row of the selected hour,
-                 * so it's necessary to also go back three rows.
-                 */
-                let hour = parseInt(session.appointmentDate.hour)
-                let targetRow = [
-                    document.querySelectorAll("tr")[(hour-7)*4],
-                    document.querySelectorAll("tr")[((hour-7)*4)-1],
-                    document.querySelectorAll("tr")[((hour-7)*4)-2],
-                    document.querySelectorAll("tr")[((hour-7)*4)-3]
-                ]
-
-                // console.log("oi"+(hour-7)*4);
-                // console.log(targetRow);
-
-                //verifies if targetRow isn't null
-                if(targetRow){
-                    let targetRowCells = [
-                        targetRow[0].querySelectorAll("td"),
-                        targetRow[1].querySelectorAll("td"),
-                        targetRow[2].querySelectorAll("td"),
-                        targetRow[3].querySelectorAll("td")
-                    ]
-                    let targetCellIndex = [0, 0, 0, 0]
-                    
-                    // console.log("targetRowCells");
-                    // console.log(targetRowCells);
-
-                    /**
-                     * if there is 8 cells, it means that one of them bellongs to the hour,
-                     * so the following code ignores the hour cell
-                     */
-
-                    for (let i = 0; i < targetRowCells.length; i++) {
-                        if(targetRowCells[i].length == 8){
-                            targetCellIndex[i]=1
-                        }
-                    }
-
-                    //gets a index from 0-6 in which 0 is sunday
-                    let dayOfWeek = new Date(`${session.appointmentDate.year}-${session.appointmentDate.month}-${session.appointmentDate.day}`).getDay()
-
-
-
-                    /**
-                     * The following calculation does a convertion of the day of week to the cell index,
-                     * this is necessary because the day of week index starts at sunday, and the tds start at monday  
-                     */
-                    let targetCell = [
-                        targetRowCells[0][targetCellIndex[0]+(dayOfWeek-1)],
-                        targetRowCells[1][targetCellIndex[1]+(dayOfWeek-1)],
-                        targetRowCells[2][targetCellIndex[2]+(dayOfWeek-1)],
-                        targetRowCells[3][targetCellIndex[3]+(dayOfWeek-1)]
-                    ]
-
-                    if (targetCell) {
-                        if(!targetCell[0].querySelector("button")){
-                            let button = document.createElement("button")
-                            button.textContent = "Button"
-                            button.addEventListener("click", function() {
-                                alert("Butaum was clicked!");
-                            });
-
-                            targetCell[0].appendChild(button)
-                        }
- 
-
-                        targetCell[0].classList.add("session_active")
-                        
-                        targetCell[1].classList.add("session_active")
-
-                        targetCell[2].classList.add("session_active")
-                        targetCell[2].textContent = convertHourFormat(session.appointmentDate.hour + session.appointmentDate.minutes)
-
-                        targetCell[3].classList.add("session_active")
-                        targetCell[3].textContent = session.patientName
-                    }
-
-                    /**
-                     * Since we only finished the last row of the card,
-                     * now it's necessary to go back three rows to finish the card
-                     */
-                }
-            });   
-        }
-        
     }, [])
+
+    /**
+     * For a better understanding of the following code I will hereby present an example:
+     * If you want to make black the cell corresponding to monday at 7am, you need to
+     * select the first td (cell) after the td corresponding to the hour information in the 
+     * first four rows, since each hours equals 4 tds and each td equals 15 minutes.
+     */
+    useEffect(() => {
+        if(appointments.length > 0){
+            const tabela = document.querySelector("#appointments_table")
+            
+            if (tabela) {
+                console.log("entrou if tabela");
+                console.log(appointments);
+                
+                appointments.forEach(session => {
+                    console.log("entrou foreach");
+                    /**
+                     * the following calculation gets the last row of the selected hour,
+                     * so it's necessary to also go back three rows.
+                     */
+                    let hour = parseInt(session.appointmentDate.hour)
+                    console.log("hour:");
+                    console.log(hour);
+                    
+                    const rows = document.querySelectorAll("tr");
+                    console.log("rows");
+                    console.log(rows);
+                    
+                    let targetRow = []
+                    if (rows.length > (hour - 6) * 4) {
+                        targetRow = [
+                            rows[(hour - 6) * 4],
+                            rows[((hour - 6) * 4) - 1],
+                            rows[((hour - 6) * 4) - 2],
+                            rows[((hour - 6) * 4) - 3]
+                        ]
+                    }
+                    // console.log("oi"+(hour-6)*4);
+                    console.log("targetRow:");
+                    
+                    console.log(targetRow);
+
+                    //verifies if targetRow isn't null
+                    if(targetRow.length >= 4){
+                        let targetRowCells = [
+                            targetRow[0].querySelectorAll("td"),
+                            targetRow[1].querySelectorAll("td"),
+                            targetRow[2].querySelectorAll("td"),
+                            targetRow[3].querySelectorAll("td")
+                        ]
+                        let targetCellIndex = [0, 0, 0, 0]
+                        
+                        // console.log("targetRowCells");
+                        // console.log(targetRowCells);
+
+                        /**
+                         * if there is 8 cells, it means that one of them bellongs to the hour,
+                         * so the following code ignores the hour cell
+                         */
+
+                        for (let i = 0; i < targetRowCells.length; i++) {
+                            if(targetRowCells[i].length == 8){
+                                targetCellIndex[i]=1
+                            }
+                        }
+
+                        //gets a index from 0-6 in which 0 is sunday
+                        let dayOfWeek = new Date(`${session.appointmentDate.year}-${session.appointmentDate.month}-${session.appointmentDate.day}`).getDay()
+
+
+
+                        /**
+                         * The following calculation does a convertion of the day of week to the cell index,
+                         * this is necessary because the day of week index starts at sunday, and the tds start at monday  
+                         */
+                        let targetCell = [
+                            targetRowCells[0][targetCellIndex[0]+(dayOfWeek-1)],
+                            targetRowCells[1][targetCellIndex[1]+(dayOfWeek-1)],
+                            targetRowCells[2][targetCellIndex[2]+(dayOfWeek-1)],
+                            targetRowCells[3][targetCellIndex[3]+(dayOfWeek-1)]
+                        ]
+
+                        if (targetCell) {
+                            if(!targetCell[0].querySelector("button")){
+                                let button = document.createElement("button")
+                                button.textContent = "Button"
+                                button.addEventListener("click", function() {
+                                    alert("Butaum was clicked!");
+                                });
+
+                                targetCell[0].appendChild(button)
+                            }
+    
+
+                            targetCell[0].classList.add("session_active")
+                            
+                            targetCell[1].classList.add("session_active")
+
+                            targetCell[2].classList.add("session_active")
+                            targetCell[2].textContent = convertHourFormat(session.appointmentDate.hour +":"+ session.appointmentDate.minutes)
+
+                            targetCell[3].classList.add("session_active")
+                            targetCell[3].textContent = session.patientName
+                        }
+
+                        /**
+                         * Since we only finished the last row of the card,
+                         * now it's necessary to go back three rows to finish the card
+                         */
+                    }
+                });   
+            }
+        }
+    }, [appointments])
 
     return (
         <div className="table_container">
@@ -412,7 +433,7 @@ export default function Calendar() {
                     </tr>
                     <tr>
                         <td className="hour" rowSpan="4"><span>12 PM</span></td>
-                        <td onclick="alert('test')"></td>
+                        <td onClick={()=>alert("teste")}></td>
                         <td></td>
                         <td></td>
                         <td></td>
