@@ -10,15 +10,18 @@ import { Home } from "./components/Home/Home";
 import { BrowserRouter } from "react-router-dom";
 import ProtectedRoutes from "./utils/ProtectedRoutes";
 import SchedulingCalendar from "./components/Scheduling/SchedulingCalendar";
+import AvailableSchedule from "./components/AvailableSchedule/AvailableSchedule";
 
 function App() {
   const [user] = useAuthState(auth);
 
   return (
     <div className="App">
-      <BrowserRouter>
+      
+      <AvailableSchedule/>
+      {/* <BrowserRouter>
         <ProtectedRoutes />
-      </BrowserRouter>
+      </BrowserRouter> */}
 
       {/* <SchedulingCalendar /> */}
       {/* 

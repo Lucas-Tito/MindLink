@@ -1,0 +1,38 @@
+.add_schedule_popup{
+    display: flex;
+    flex-direction: column;
+    visibility: hidden;
+    align-self: center;
+    background: white;
+    color: black;
+    border-radius: 6px;
+    position: absolute;
+    top: 38%;
+    text-align: center;
+    padding: 10px 15px;
+    transform: scale(0.2);
+    border: 2px;
+    border-color: #9d8dd6;
+    border-style: solid;
+}
+
+.add_schedule_popup.active{
+    visibility: visible;
+    transition: all 0.2s ease-in-out; 
+    transform: scale(1);
+}
+
+.close_btn{
+    display: flex;
+    align-self: flex-end;
+    transition: none;
+    background-image: url(../../../assets/close_icon.svg);
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-color: transparent;
+    width: 20px;
+    height: 20px;
+    border: none;
+    cursor: pointer;
+}
