@@ -44,6 +44,7 @@ const userController = {
           .collection("Users")
           .doc(request.params.id)
           .get();
+          
     
         if (!userRef.exists) {
           return response.status(404).json({ message: "User not found" });

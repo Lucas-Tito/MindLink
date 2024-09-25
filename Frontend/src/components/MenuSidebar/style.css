@@ -7,6 +7,7 @@
   left: 0;
   background-color: #ffffff; /* Cor de fundo da barra lateral */
   padding-top: 20px; /* Espaçamento superior */
+  box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
 }
 /* Estilo da segunda barra lateral (direita) */
 .sidebar-right {

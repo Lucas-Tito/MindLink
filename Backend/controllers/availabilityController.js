@@ -14,7 +14,7 @@ const availabilityController = {
     },
     getAvailabilitysByUserId: async (request,response) => {
         admin.firestore().collection("Availability")
-        .where('professionalId', '==', request.params.userId)
+        .where('professionalId', '==', request.params.id)
         .get().then((snapshot) => {
             const availabilitys = snapshot.docs.map((doc) => ({
                 ...doc.data(), availabilityId: doc.id

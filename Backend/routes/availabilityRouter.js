@@ -10,6 +10,6 @@ router.route("/availability").post((req, res) => availabilityController.createAv
 
 router
   .route("/availability/:id")
-  .get((req, res) => availabilityController.getavailabilityById(req, res));
+  .get((req, res) => availabilityController.getAvailabilitysByUserId(req, res));
 
 export default router;

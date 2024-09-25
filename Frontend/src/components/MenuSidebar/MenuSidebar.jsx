@@ -5,6 +5,7 @@ import chatIcon from "../../assets/chatIcon.svg";
 import notificationIcon from "../../assets/notificationIcon.svg";
 import engineIcon from "../../assets/engine.svg";
 import cerebroIcon from "../../assets/cerebro.png";
+import clock_icon from "../../assets/clock_icon.svg"
 import firebase from "firebase/compat/app";
 import "./style.css";
 
@@ -69,20 +70,35 @@ const MenuSidebar = ({ notificationCount }) => {
           </li>
           {/* Renderizar condicionalmente se o usuário for profissional */}
           {isProfessional && (
-            <li>
-              <div className="notification-container">
-                <img
-                  src={notificationIcon}
-                  className="notification-icon"
-                  onClick={() => navigate("/notificationPsycho")}
+            <>
+              <li>
+                <div className="notification-container">
+                  <img
+                    src={notificationIcon}
+                    className="notification-icon"
+                    onClick={() => navigate("/notificationPsycho")}
+                  />
+                  {notificationCount > 0 && (
+                    <span className="notification-badge">
+                      {notificationCount}
+                    </span>
+                  )}
+                </div>
+              </li>
+
+              <li>
+                <img 
+                  src={clock_icon}
+                  style={{
+                    width: "30px",
+                    left: "35px",
+                    position: "absolute",
+                    top: "390px",
+                  }}
+                  onClick={()=>navigate("/availableSchedule")}
                 />
-                {notificationCount > 0 && (
-                  <span className="notification-badge">
-                    {notificationCount}
-                  </span>
-                )}
-              </div>
-            </li>
+              </li>
+            </>
           )}
           <li>
             <img

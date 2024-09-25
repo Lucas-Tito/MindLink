@@ -16,6 +16,7 @@ export default function AddSchedulePopup(){
 
             <WeekDayPicker/>
             
+            <button>add</button>
         </div>
     )
 }

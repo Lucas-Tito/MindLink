@@ -18,10 +18,10 @@ function App() {
   return (
     <div className="App">
       
-      <AvailableSchedule/>
-      {/* <BrowserRouter>
+      {/* <AvailableSchedule/> */}
+      <BrowserRouter>
         <ProtectedRoutes />
-      </BrowserRouter> */}
+      </BrowserRouter>
 
       {/* <SchedulingCalendar /> */}
       {/* 
