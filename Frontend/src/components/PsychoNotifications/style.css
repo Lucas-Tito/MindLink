@@ -1,0 +1,39 @@
+/* style.css */
+.notifications-container {
+  display: flex;
+  flex-direction: row; /* Para alinhar a sidebar e as notificações lado a lado */
+}
+
+.notifications {
+  margin-top: 50px;
+  margin-left: 200px; /* Espaço entre a sidebar e as notificações */
+}
+
+button {
+  margin-right: 10px; /* Espaçamento entre os botões */
+  padding: 10px 15px; /* Tamanho dos botões */
+  border: none; /* Remover borda padrão */
+  border-radius: 5px; /* Arredondar cantos */
+  cursor: pointer; /* Mostrar cursor de pointer */
+  transition: background-color 0.3s; /* Transição suave para a mudança de cor */
+}
+
+/* Estilo para o botão Aceitar */
+.accept-button {
+  background-color: #4caf50; /* Verde */
+  color: white; /* Cor do texto */
+}
+
+.accept-button:hover {
+  background-color: #45a049; /* Verde escuro ao passar o mouse */
+}
+
+/* Estilo para o botão Recusar */
+.reject-button {
+  background-color: #f44336; /* Vermelho */
+  color: white; /* Cor do texto */
+}
+
+.reject-button:hover {
+  background-color: #d32f2f; /* Vermelho escuro ao passar o mouse */
+}

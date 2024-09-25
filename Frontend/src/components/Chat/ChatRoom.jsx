@@ -87,14 +87,9 @@ const ChatRoom = () => {
               <h3 className="user-name">{selectedUser.name}</h3>
             </>
           ) : (
-            <>
-              <img
-                src="caminho_para_a_sua_foto"
-                alt="Foto do Usuário"
-                className="user-avatar"
-              />
-              <h3 className="user-name">Nome do Usuário</h3>
-            </>
+            <h2 className="centered-message">
+              Selecione um usuário para começarmos 😉
+            </h2> // Mensagem centralizada
           )}
         </div>
         <div className="chat-messages">
@@ -103,21 +98,23 @@ const ChatRoom = () => {
           ))}
           <span ref={dummy}></span> {/* Span vazio para rolagem automática */}
         </div>
-        <div className="message-input">
-          <textarea
-            value={formValue}
-            onChange={(e) => setFormValue(e.target.value)}
-            placeholder="Digite sua mensagem..."
-            className="input-text"
-          ></textarea>
-          <button
-            onClick={sendMessage}
-            disabled={!formValue}
-            className="send-button"
-          >
-            Enviar
-          </button>
-        </div>
+        {selectedUser && ( // Mostrar o input e o botão apenas se um usuário estiver selecionado
+          <div className="message-input">
+            <textarea
+              value={formValue}
+              onChange={(e) => setFormValue(e.target.value)}
+              placeholder="Digite sua mensagem..."
+              className="input-text"
+            ></textarea>
+            <button
+              onClick={sendMessage}
+              disabled={!formValue}
+              className="send-button"
+            >
+              Enviar
+            </button>
+          </div>
+        )}
       </div>
     </div>
   );

@@ -38,3 +38,33 @@
   align-items: center;
   font-family: "Open Sans";
 }
+
+.available_times {
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-family: "Open Sans", sans-serif;
+}
+
+.available_times span {
+  font-size: 18px;
+  color: #333;
+  margin-bottom: 10px;
+}
+
+.available_times button {
+  background-color: #615ef0; /* Cor de fundo do botão */
+  color: white; /* Cor do texto */
+  border: none; /* Remove a borda padrão */
+  border-radius: 5px; /* Bordas arredondadas */
+  padding: 10px 15px; /* Espaçamento interno */
+  margin: 5px 0; /* Espaçamento entre os botões */
+  font-size: 16px; /* Tamanho da fonte */
+  cursor: pointer; /* Muda o cursor ao passar o mouse */
+  transition: background-color 0.3s ease; /* Transição suave para hover */
+}
+
+.available_times button:hover {
+  background-color: #4d4abc; /* Cor de fundo ao passar o mouse */
+}
