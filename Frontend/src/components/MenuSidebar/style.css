@@ -44,3 +44,24 @@
 .sidebar ul li a:hover {
   background-color: #555; /* Cor de fundo quando hover */
 }
+.notification-container {
+  position: relative;
+}
+
+.notification-icon {
+  width: 40px;
+  position: absolute;
+  left: 25px;
+  top: 195px;
+}
+
+.notification-badge {
+  position: absolute;
+  top: 190px;
+  right: 19px;
+  background: red;
+  color: white;
+  border-radius: 50%;
+  padding: 2px 6px;
+  font-size: 12px;
+}
