@@ -1,16 +1,17 @@
-import React, { useState } from "react";
+import React from "react";
 import "./style.css";
 
 import homeIcon from "../../assets/home.svg";
 import chatIcon from "../../assets/chatIcon.svg";
 import logoIcon from "../../assets/Logo.svg";
-import lupaIcon from "../../assets/lupaIcon.svg";
+import notificationIcon from "../../assets/notificationIcon.svg";
 import engineIcon from "../../assets/engine.svg";
 import cerebroIcon from "../../assets/cerebro.png";
 import { useNavigate } from "react-router-dom";
 
-const MenuSidebar = () => {
+const MenuSidebar = ({ notificationCount }) => {
   const navigate = useNavigate();
+
   return (
     <div>
       <div className="sidebar">
@@ -51,18 +52,35 @@ const MenuSidebar = () => {
             />
           </li>
           <li>
-            <img
-              src={lupaIcon}
-              style={{
-                width: "40px",
-                left: "30px",
-                position: "absolute",
-                top: "300px",
-              }}
-              onClick={() => navigate("/psychCalendar")}
-            />
+            <div style={{ position: "relative" }}>
+              <img
+                src={notificationIcon}
+                style={{
+                  width: "40px",
+                  left: "25px",
+                  position: "absolute",
+                  top: "195px",
+                }}
+                onClick={() => navigate("/notificationPsycho")}
+              />
+              {notificationCount > 0 && (
+                <span
+                  style={{
+                    position: "absolute",
+                    top: "190px",
+                    right: "19px",
+                    background: "red",
+                    color: "white",
+                    borderRadius: "50%",
+                    padding: "2px 6px",
+                    fontSize: "12px",
+                  }}
+                >
+                  {notificationCount}
+                </span>
+              )}
+            </div>
           </li>
-
           <li>
             <img
               src={engineIcon}

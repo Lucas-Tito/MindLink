@@ -5,6 +5,7 @@ import Login from "../components/Login/login";
 import { EditProfile } from "../components/MenuSidebar/EditProfile/EditProfile";
 import SchedulingCalendar from "../components/Scheduling/SchedulingCalendar";
 import Register from "../components/Register/index";
+import Notifications from "../components/PsychoNotifications";
 
 export const navigation = [
   {
@@ -56,6 +57,12 @@ export const navigation = [
     path: "/register",
     name: "register",
     element: <Register />,
+    isPrivate: false,
+  },
+  {
+    path: "/notificationPsycho",
+    name: "notificationPsycho",
+    element: <Notifications />,
     isPrivate: false,
   },
 ];

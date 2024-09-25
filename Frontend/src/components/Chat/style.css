@@ -13,6 +13,22 @@
   align-items: center;
   margin-bottom: 20px;
 }
+/* Adicione isso ao seu arquivo CSS */
+
+.centered-message {
+  text-align: center; /* Centraliza o texto */
+  margin-top: 200px; /* Ajusta a margem superior para centralizar verticalmente */
+  margin-left: auto; /* Para centralizar horizontalmente */
+  margin-right: auto; /* Para centralizar horizontalmente */
+  padding: 20px; /* Adiciona padding interno */
+  background-color: #f0f0f0; /* Fundo claro para destacar a mensagem */
+  border: 1px solid #ccc; /* Borda sutil */
+  border-radius: 10px; /* Bordas arredondadas */
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Sombra suave para profundidade */
+  color: #555; /* Cor do texto */
+  font-size: 1.5rem; /* Tamanho da fonte */
+  width: 300px; /* Largura do bloco */
+}
 
 .user-avatar {
   width: 50px;
