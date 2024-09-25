@@ -4,6 +4,7 @@ import arrow_left_icon from "../../assets/arrow_left.svg";
 import arrow_right_icon from "../../assets/arrow_right.svg";
 import { useLocation } from "react-router-dom";
 import firebase from "firebase/compat/app";
+import MenuSidebar from "../MenuSidebar/MenuSidebar";
 
 export default function SchedulingCalendar() {
   const auth = firebase.auth();
@@ -22,6 +23,7 @@ export default function SchedulingCalendar() {
 
   const location = useLocation();
   const [professional, setProfessional] = useState(null);
+  let professionalId = professional?.uid;
 
   useEffect(() => {
     if (location.state) {
@@ -68,12 +70,57 @@ export default function SchedulingCalendar() {
   // Efeito para buscar horários disponíveis quando o componente é montado
   useEffect(() => {
     const fetchAvailableTimes = async () => {
-      // Simulando uma chamada à API para obter horários disponíveis
-      setAvailableTimes(["14:00", "15:00", "18:00"]);
+      try {
+        if (!professional) {
+          console.log("Waiting for professional to load...");
+          return;
+        }
+
+        const professionalId = professional.uid;
+
+        if (!professionalId) {
+          console.error("Missing professionalId");
+          return;
+        }
+
+        console.log(
+          "Fetching available times for professional:",
+          professionalId
+        );
+
+        const availabilityRef = firebase.firestore().collection("Availability");
+        const snapshot = await availabilityRef
+          .where("professionalId", "==", professionalId)
+          .get();
+
+        if (!snapshot.empty) {
+          const times = [];
+
+          snapshot.forEach((doc) => {
+            const data = doc.data();
+            const { startHour, startMinute } = data.startTime;
+
+            // Cria um horário formatado a partir dos dados
+            times.push(
+              `${startHour.padStart(2, "0")}:${startMinute.padStart(2, "0")}`
+            );
+          });
+
+          setAvailableTimes(times);
+          console.log("Horários disponíveis: ", times);
+        } else {
+          setAvailableTimes([]);
+          console.log("No available times found.");
+        }
+      } catch (error) {
+        console.error("Error fetching available times:", error);
+      }
     };
 
-    fetchAvailableTimes();
-  }, []);
+    if (professional) {
+      fetchAvailableTimes();
+    }
+  }, [professional]);
 
   // Efeito para enviar os dados do agendamento quando o estado shouldSendAppointment é true
   useEffect(() => {
@@ -210,54 +257,57 @@ export default function SchedulingCalendar() {
   };
 
   return (
-    <div className="scheduling_calendar">
-      <div className="datepicker">
-        <div className="datepicker-top">
-          <div className="month-selector">
-            <button className="arrow" onClick={() => handleMonthChange(-1)}>
-              <img src={arrow_left_icon} alt="Previous Month" />
-            </button>
-            <span className="month-name">
-              {currentDate.toLocaleString("default", { month: "long" })}{" "}
-              {currentDate.getFullYear()}
-            </span>
-            <button className="arrow" onClick={() => handleMonthChange(1)}>
-              <img src={arrow_right_icon} alt="Next Month" />
-            </button>
+    <>
+      <MenuSidebar />
+      <div className="scheduling_calendar">
+        <div className="datepicker">
+          <div className="datepicker-top">
+            <div className="month-selector">
+              <button className="arrow" onClick={() => handleMonthChange(-1)}>
+                <img src={arrow_left_icon} alt="Previous Month" />
+              </button>
+              <span className="month-name">
+                {currentDate.toLocaleString("default", { month: "long" })}{" "}
+                {currentDate.getFullYear()}
+              </span>
+              <button className="arrow" onClick={() => handleMonthChange(1)}>
+                <img src={arrow_right_icon} alt="Next Month" />
+              </button>
+            </div>
+          </div>
+          <div className="datepicker-calendar">
+            <span className="day">Su</span>
+            <span className="day">Mo</span>
+            <span className="day">Tu</span>
+            <span className="day">We</span>
+            <span className="day">Th</span>
+            <span className="day">Fr</span>
+            <span className="day">Sa</span>
+            {getDaysInMonth().map((day, index) => (
+              <button
+                key={index}
+                className={`date ${
+                  day === appointmentDate.day ? "selected-day" : ""
+                }`}
+                onClick={() => day && handleDateClick(day)}
+              >
+                {day || ""}
+              </button>
+            ))}
           </div>
         </div>
-        <div className="datepicker-calendar">
-          <span className="day">Su</span>
-          <span className="day">Mo</span>
-          <span className="day">Tu</span>
-          <span className="day">We</span>
-          <span className="day">Th</span>
-          <span className="day">Fr</span>
-          <span className="day">Sa</span>
-          {getDaysInMonth().map((day, index) => (
-            <button
-              key={index}
-              className={`date ${
-                day === appointmentDate.day ? "selected-day" : ""
-              }`}
-              onClick={() => day && handleDateClick(day)}
-            >
-              {day || ""}
-            </button>
-          ))}
-        </div>
-      </div>
 
-      <div className="available_times">
-        <span>Horários disponíveis</span>
-        <div>
-          {availableTimes.map((time, index) => (
-            <button key={index} onClick={() => handleTimeClick(time)}>
-              {time}
-            </button>
-          ))}
+        <div className="available_times">
+          <span>Horários disponíveis</span>
+          <div>
+            {availableTimes.map((time, index) => (
+              <button key={index} onClick={() => handleTimeClick(time)}>
+                {time}
+              </button>
+            ))}
+          </div>
         </div>
       </div>
-    </div>
+    </>
   );
 }

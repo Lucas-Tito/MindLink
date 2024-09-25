@@ -26,6 +26,7 @@ body {
   width: 100%; /* Imagem ocupa toda a largura do container */
   height: auto; /* Altura ajustável para manter a proporção */
 }
+
 /* Estilos para o formulário */
 .form {
   width: 300px; /* Largura do formulário */
@@ -37,10 +38,9 @@ body {
 }
 
 /* Estilos para os campos de entrada */
-.form input[type="text"],
-.form input[type="email"],
-.form input[type="password"] {
-  width: 90%;
+.form .input-container .input-email,
+.form .input-container .input-password {
+  width: 74%;
   padding: 10px;
   margin-bottom: 10px;
   margin-left: 20px;
@@ -53,22 +53,22 @@ body {
   transition: border-bottom-color 0.3s ease; /* Transição apenas para a cor da borda inferior */
 }
 
-.form input[type="text"]:focus,
-.form input[type="email"]:focus,
-.form input[type="password"]:focus {
+.input-email:focus,
+.input-password:focus {
   outline: none; /* Remove a borda de foco padrão */
   border-bottom-color: #007bff; /* Cor da borda inferior quando o campo ganha foco */
 }
 
-.form input[type="text"]::placeholder,
-.form input[type="email"]::placeholder,
-.form input[type="password"]::placeholder {
+.form .input-container .input-email::placeholder,
+.input-password::placeholder {
   color: #999; /* Cor do texto do placeholder */
 }
+
 /* Estilos para o botão de envio */
-.form .btn1 {
-  width: 96%;
-  padding: 15px;
+.form .btnLogin {
+  width: 80%;
+  margin-bottom: 5px;
+  padding: 10px;
   background-color: #8f1ea8;
   color: #fff;
   margin-left: 20px;
@@ -79,51 +79,10 @@ body {
   transition: background-color 0.3s ease; /* Adiciona uma transição para suavizar a mudança de cor */
 }
 
-.form .btn1:hover {
+.form .btnLogin:hover {
   filter: brightness(
     0.9
   ); /* Cor de fundo alterada ao passar o mouse sobre o botão */
-}
-
-/* Estilos para o botão de envio quando o cursor está sobre ele */
-.form input[type="submit"]:hover {
-  background-color: #0056b3; /* Cor de fundo alterada ao passar o cursor sobre o botão */
-}
-.input-container {
-  position: relative;
-}
-
-.input-icon {
-  position: absolute;
-  left: 250px; /* Ajuste conforme necessário */
-  top: 20px;
-  width: 15px;
-  transform: translateY(-50%);
-}
-.input-icon2 {
-  position: absolute;
-  left: 32.1%; /* Ajuste conforme necessário */
-  top: 53%;
-  width: 20px;
-  height: 30px;
-  transform: translateY(-50%);
-}
-.checkbox-container {
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  margin-top: 5px;
-  margin-right: 17px;
-  margin-bottom: 5px;
-}
-
-.checkbox-label1 {
-  margin-left: 5px;
-  color: gray;
-}
-.checkbox-label2 {
-  margin-left: 5px;
-  color: black;
 }
 
 .title {
@@ -146,7 +105,14 @@ body {
   width: 50px;
   height: 50px;
 }
-.cerebro_icon {
-  width: 50px;
-  height: 50px;
+.linkRegister {
+  display: inline-block; /* Faz com que o link se comporte como um bloco */
+  margin-top: 10px; /* Espaço acima do link */
+  color: #8f1ea8; /* Cor do texto do link */
+  text-decoration: none; /* Remove o sublinhado */
+  font-family: "Roboto"; /* Fonte */
+}
+
+.linkRegister:hover {
+  text-decoration: underline; /* Sublinha ao passar o mouse */
 }

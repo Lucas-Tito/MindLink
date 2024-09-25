@@ -72,6 +72,7 @@ const MenuSidebar = () => {
                 position: "absolute",
                 top: "600px",
               }}
+              onClick={() => navigate("/editProfile")}
             />
           </li>
         </ul>

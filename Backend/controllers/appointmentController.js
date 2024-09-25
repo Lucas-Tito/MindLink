@@ -54,7 +54,9 @@ const appointmentController = {
       snapshot.forEach(doc => {
         appointments.push({ id: doc.id, ...doc.data() });
       });
-  
+      
+      console.log(appointments);
+      
       response.json(appointments);
     } catch (error) {
       console.error("Error getting appointments: ", error);

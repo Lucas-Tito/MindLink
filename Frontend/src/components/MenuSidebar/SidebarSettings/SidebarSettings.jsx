@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 import "./style.css";
-import editIcon from "../../assets/editIcon.svg";
-import notificationIcon from "../../assets/notificationIcon.svg";
-import helpIcon from "../../assets/helpIcon.svg";
+import editIcon from "../../../assets/editIcon.svg";
+import notificationIcon from "../../../assets/notificationIcon.svg";
+
+import helpIcon from "../../../assets/helpIcon.svg";
 
 const SidebarSettings = () => {
   const handleSearch = (term) => {
