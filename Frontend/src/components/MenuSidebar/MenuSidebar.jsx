@@ -1,16 +1,34 @@
-import React, { useState } from "react";
-import "./style.css";
-
+import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import homeIcon from "../../assets/home.svg";
 import chatIcon from "../../assets/chatIcon.svg";
-import logoIcon from "../../assets/Logo.svg";
-import lupaIcon from "../../assets/lupaIcon.svg";
+import notificationIcon from "../../assets/notificationIcon.svg";
 import engineIcon from "../../assets/engine.svg";
 import cerebroIcon from "../../assets/cerebro.png";
-import { useNavigate } from "react-router-dom";
+import clock_icon from "../../assets/clock_icon.svg"
+import firebase from "firebase/compat/app";
+import "./style.css";
 
-const MenuSidebar = () => {
+const MenuSidebar = ({ notificationCount }) => {
   const navigate = useNavigate();
+  const [isProfessional, setIsProfessional] = useState(false);
+
+  useEffect(() => {
+    const checkIsProfessional = async () => {
+      const auth = firebase.auth();
+      if (auth.currentUser) {
+        const userId = auth.currentUser.uid;
+        const response = await fetch(
+          `http://localhost:3000/mindlink/users/checkIfIsProfessional/${userId}`
+        );
+        const data = await response.json();
+        setIsProfessional(data.isProfessional);
+      }
+    };
+
+    checkIsProfessional();
+  }, []);
+
   return (
     <div>
       <div className="sidebar">
@@ -50,19 +68,38 @@ const MenuSidebar = () => {
               onClick={() => navigate("/chat")}
             />
           </li>
-          <li>
-            <img
-              src={lupaIcon}
-              style={{
-                width: "40px",
-                left: "30px",
-                position: "absolute",
-                top: "300px",
-              }}
-              onClick={() => navigate("/psychCalendar")}
-            />
-          </li>
+          {/* Renderizar condicionalmente se o usuário for profissional */}
+          {isProfessional && (
+            <>
+              <li>
+                <div className="notification-container">
+                  <img
+                    src={notificationIcon}
+                    className="notification-icon"
+                    onClick={() => navigate("/notificationPsycho")}
+                  />
+                  {notificationCount > 0 && (
+                    <span className="notification-badge">
+                      {notificationCount}
+                    </span>
+                  )}
+                </div>
+              </li>
 
+              <li>
+                <img 
+                  src={clock_icon}
+                  style={{
+                    width: "30px",
+                    left: "35px",
+                    position: "absolute",
+                    top: "390px",
+                  }}
+                  onClick={()=>navigate("/availableSchedule")}
+                />
+              </li>
+            </>
+          )}
           <li>
             <img
               src={engineIcon}

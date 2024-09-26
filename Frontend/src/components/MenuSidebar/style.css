@@ -7,6 +7,7 @@
   left: 0;
   background-color: #ffffff; /* Cor de fundo da barra lateral */
   padding-top: 20px; /* Espaçamento superior */
+  box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
 }
 /* Estilo da segunda barra lateral (direita) */
 .sidebar-right {
@@ -43,4 +44,25 @@
 /* Estilo quando o link do item de menu é hover */
 .sidebar ul li a:hover {
   background-color: #555; /* Cor de fundo quando hover */
+}
+.notification-container {
+  position: relative;
+}
+
+.notification-icon {
+  width: 40px;
+  position: absolute;
+  left: 25px;
+  top: 195px;
+}
+
+.notification-badge {
+  position: absolute;
+  top: 190px;
+  right: 19px;
+  background: red;
+  color: white;
+  border-radius: 50%;
+  padding: 2px 6px;
+  font-size: 12px;
 }

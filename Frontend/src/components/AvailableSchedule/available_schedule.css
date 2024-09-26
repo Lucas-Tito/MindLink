@@ -1,0 +1,25 @@
+.available_schedule{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+    height: 100vh;
+}
+
+.available_schedule_btn{
+    width: 80px;
+    padding: 0;
+    border: none;
+    border-radius: 400px;
+    cursor: pointer;
+    position: absolute;
+    right: 50px;
+    bottom: 50px;
+    box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;
+}
+
+.availabilityElements{
+    display: flex;
+    flex-direction: row;
+}
+

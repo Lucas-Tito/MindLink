@@ -14,15 +14,24 @@ export default function ProtectedRoutes(){
     const loginFunction = async (login, password) => {
         try {
           await auth.signInWithEmailAndPassword(login, password);
-
+          
           const checkIsProfessional = async () => {
+            console.log("oi");
+            
             try {
+                console.log("oi2");
                 const userId = auth.currentUser.uid
                 const response = await fetch(`http://localhost:3000/mindlink/users/checkIfIsProfessional/${userId}`);
+                console.log("oi3");
+                
                 if (!response.ok) {
                     throw new Error("Failed to check if user is professional");
                 }
                 const data = await response.json();
+                
+                console.log("data");
+                
+                console.log(data);
                 
                 setUser((prevData)=>{return {
                   ...prevData,

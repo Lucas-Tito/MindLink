@@ -5,6 +5,8 @@ import Login from "../components/Login/login";
 import { EditProfile } from "../components/MenuSidebar/EditProfile/EditProfile";
 import SchedulingCalendar from "../components/Scheduling/SchedulingCalendar";
 import Register from "../components/Register/index";
+import Notifications from "../components/PsychoNotifications";
+import AvailableSchedule from "../components/AvailableSchedule/AvailableSchedule"
 
 export const navigation = [
   {
@@ -46,6 +48,16 @@ export const navigation = [
     isPrivate: true,
     isProfessionalFlow: true,
   },
+
+  //this screen is shown when managing schedules (professional)
+  {
+    path: "/availableSchedule",
+    name: "Available Schedule",
+    element: <AvailableSchedule/>,
+    isPrivate: true,
+    isProfessionalFlow: true,
+  },
+
   {
     path: "/editProfile",
     name: "edit",
@@ -56,6 +68,12 @@ export const navigation = [
     path: "/register",
     name: "register",
     element: <Register />,
+    isPrivate: false,
+  },
+  {
+    path: "/notificationPsycho",
+    name: "notificationPsycho",
+    element: <Notifications />,
     isPrivate: false,
   },
 ];

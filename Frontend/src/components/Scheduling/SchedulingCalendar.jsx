@@ -8,30 +8,13 @@ import MenuSidebar from "../MenuSidebar/MenuSidebar";
 
 export default function SchedulingCalendar() {
   const auth = firebase.auth();
-  // Estado para armazenar os horários disponíveis
   const [availableTimes, setAvailableTimes] = useState([]);
-
-  // Estados para armazenar informações do paciente e profissional
   const [patientName, setPatientName] = useState("");
   const [patientId, setPatientId] = useState("");
-
-  // Estado para controlar o envio dos dados do agendamento
   const [shouldSendAppointment, setShouldSendAppointment] = useState(false);
-
-  // Estado para gerenciar a data atual usada na navegação do calendário
   const [currentDate, setCurrentDate] = useState(new Date());
-
   const location = useLocation();
   const [professional, setProfessional] = useState(null);
-  let professionalId = professional?.uid;
-
-  useEffect(() => {
-    if (location.state) {
-      setProfessional(location.state.data);
-    }
-  }, [location.state]);
-
-  // Estado para armazenar a data do agendamento
   const [appointmentDate, setAppointmentDate] = useState({
     year: null,
     month: null,
@@ -40,25 +23,23 @@ export default function SchedulingCalendar() {
     minutes: null,
     seconds: 0,
   });
-
   const user = auth.currentUser.uid;
 
-  // Efeito para buscar dados do paciente quando o componente é montado
+  useEffect(() => {
+    if (location.state) {
+      setProfessional(location.state.data);
+    }
+  }, [location.state]);
+
   useEffect(() => {
     const fetchPatientData = async () => {
       try {
         const response = await fetch(
           `http://localhost:3000/mindlink/users/${user}`
         );
-        if (!response.ok) {
-          const errorText = await response.text();
-          throw new Error(
-            `Network response was not ok: ${response.status} - ${errorText}`
-          );
-        }
         const data = await response.json();
         setPatientName(data.name);
-        setPatientId(data.uid); // Ajuste se necessário
+        setPatientId(data.uid);
       } catch (error) {
         console.error("Error fetching patient data:", error);
       }
@@ -67,26 +48,44 @@ export default function SchedulingCalendar() {
     fetchPatientData();
   }, [user]);
 
-  // Efeito para buscar horários disponíveis quando o componente é montado
+  const [highlightedDays, setHighlightedDays] = useState(new Set());
+
+  useEffect(() => {
+    const fetchAvailableDays = async () => {
+      try {
+        if (!professional) return;
+        const professionalId = professional.uid;
+
+        const availabilityRef = firebase.firestore().collection("Availability");
+        const snapshot = await availabilityRef
+          .where("professionalId", "==", professionalId)
+          .get();
+
+        if (!snapshot.empty) {
+          const daysSet = new Set();
+          snapshot.forEach((doc) => {
+            const { dayOfWeek } = doc.data();
+            daysSet.add(dayOfWeek);
+          });
+          setHighlightedDays(daysSet);
+        } else {
+          setHighlightedDays(new Set());
+        }
+      } catch (error) {
+        console.error("Error fetching available days:", error);
+      }
+    };
+
+    if (professional) {
+      fetchAvailableDays();
+    }
+  }, [professional]);
+
   useEffect(() => {
     const fetchAvailableTimes = async () => {
       try {
-        if (!professional) {
-          console.log("Waiting for professional to load...");
-          return;
-        }
-
+        if (!professional) return;
         const professionalId = professional.uid;
-
-        if (!professionalId) {
-          console.error("Missing professionalId");
-          return;
-        }
-
-        console.log(
-          "Fetching available times for professional:",
-          professionalId
-        );
 
         const availabilityRef = firebase.firestore().collection("Availability");
         const snapshot = await availabilityRef
@@ -95,17 +94,13 @@ export default function SchedulingCalendar() {
 
         if (!snapshot.empty) {
           const times = [];
-
           snapshot.forEach((doc) => {
             const data = doc.data();
             const { startHour, startMinute } = data.startTime;
-
-            // Cria um horário formatado a partir dos dados
             times.push(
               `${startHour.padStart(2, "0")}:${startMinute.padStart(2, "0")}`
             );
           });
-
           setAvailableTimes(times);
           console.log("Horários disponíveis: ", times);
         } else {
@@ -122,11 +117,17 @@ export default function SchedulingCalendar() {
     }
   }, [professional]);
 
-  // Efeito para enviar os dados do agendamento quando o estado shouldSendAppointment é true
   useEffect(() => {
     if (shouldSendAppointment) {
       const sendAppointmentData = async () => {
         try {
+          console.log("Enviando dados do agendamento:", {
+            patientId,
+            patientName,
+            professionalId: professional.uid,
+            appointmentDate,
+          });
+
           const response = await fetch(
             "http://localhost:3000/mindlink/appointment",
             {
@@ -154,18 +155,19 @@ export default function SchedulingCalendar() {
           const data = await response.json();
           console.log("Appointment data sent successfully:", data);
 
-          // Chama a função para criar uma nova conexão após o agendamento
-          await createUserConnection(patientId, professional?.uid);
+          // Criar a conexão do usuário após o agendamento
+          await createUserConnection(patientId, professional.uid);
 
-          alert("Consulta agendada com sucesso!"); // Alerta de sucesso
+          alert("Consulta agendada com sucesso!");
         } catch (error) {
           console.error("Error sending appointment data:", error);
-          alert("Falha ao agendar consulta. Tente novamente."); // Alerta de falha
+          alert("Falha ao agendar consulta. Tente novamente.");
+        } finally {
+          setShouldSendAppointment(false); // Resetar o estado após o envio
         }
       };
 
       sendAppointmentData();
-      setShouldSendAppointment(false); // Resetar o estado após o envio
     }
   }, [shouldSendAppointment]);
 
@@ -181,7 +183,7 @@ export default function SchedulingCalendar() {
           body: JSON.stringify({
             PatientId: patientId,
             ProfessionalId: professionalId,
-            ConnectionDate: new Date().toISOString(), // ou outra data se necessário
+            ConnectionDate: new Date().toISOString(),
           }),
         }
       );
@@ -197,41 +199,37 @@ export default function SchedulingCalendar() {
       console.log("User connection created successfully:", data);
     } catch (error) {
       console.error("Error creating user connection:", error);
-      alert("Falha ao criar conexão. Tente novamente."); // Alerta de falha
+      alert("Falha ao criar conexão. Tente novamente.");
     }
   };
 
-  // Função chamada quando um horário é clicado
   const handleTimeClick = (time) => {
     setAppointmentDate({
-      year: currentDate.getFullYear(), // Define o ano atual
-      month: currentDate.getMonth() + 1, // Define o mês atual (0-indexado, por isso +1)
-      day: appointmentDate.day, // Mantém o dia selecionado anteriormente
-      hour: time.split(":")[0], // Hora extraída do formato HH:MM
-      minutes: time.split(":")[1], // Minutos extraídos do formato HH:MM
-      seconds: 0, // Segundos definidos como 0
+      year: currentDate.getFullYear(),
+      month: currentDate.getMonth() + 1,
+      day: appointmentDate.day,
+      hour: time.split(":")[0],
+      minutes: time.split(":")[1],
+      seconds: 0,
     });
-    setShouldSendAppointment(true); // Definir o estado para enviar a consulta
+    setShouldSendAppointment(true);
   };
 
-  // Função chamada quando um dia é clicado no calendário
   const handleDateClick = (day) => {
     setAppointmentDate({
       ...appointmentDate,
-      year: currentDate.getFullYear(), // Define o ano atual
-      month: currentDate.getMonth() + 1, // Define o mês atual (0-indexado, por isso +1)
-      day: day, // Atualiza o dia selecionado
+      year: currentDate.getFullYear(),
+      month: currentDate.getMonth() + 1,
+      day: day,
     });
   };
 
-  // Função para alterar o mês exibido no calendário
   const handleMonthChange = (direction) => {
     const newDate = new Date(currentDate);
-    newDate.setMonth(currentDate.getMonth() + direction); // Adiciona ou subtrai 1 mês
-    setCurrentDate(newDate); // Atualiza o estado com a nova data
+    newDate.setMonth(currentDate.getMonth() + direction);
+    setCurrentDate(newDate);
   };
 
-  // Função para gerar os dias do mês atual
   const getDaysInMonth = () => {
     const days = [];
     const firstDay = new Date(
@@ -245,11 +243,9 @@ export default function SchedulingCalendar() {
       0
     );
 
-    // Adiciona dias em branco antes do primeiro dia do mês
     for (let i = 0; i < firstDay.getDay(); i++) {
       days.push(null);
     }
-    // Adiciona os dias do mês
     for (let i = 1; i <= lastDay.getDate(); i++) {
       days.push(i);
     }
@@ -283,28 +279,40 @@ export default function SchedulingCalendar() {
             <span className="day">Th</span>
             <span className="day">Fr</span>
             <span className="day">Sa</span>
-            {getDaysInMonth().map((day, index) => (
-              <button
-                key={index}
-                className={`date ${
-                  day === appointmentDate.day ? "selected-day" : ""
-                }`}
-                onClick={() => day && handleDateClick(day)}
-              >
-                {day || ""}
-              </button>
-            ))}
+            {getDaysInMonth().map((day, index) => {
+              const dayOfWeek = new Date(
+                currentDate.getFullYear(),
+                currentDate.getMonth(),
+                day
+              ).toLocaleString("en-US", { weekday: "long" });
+              const isHighlighted = highlightedDays.has(dayOfWeek);
+              return (
+                <button
+                  key={index}
+                  className={`date ${
+                    day === appointmentDate.day ? "selected-day" : ""
+                  } ${isHighlighted ? "highlighted-day" : ""}`}
+                  onClick={() => day && handleDateClick(day)}
+                >
+                  {day || ""}
+                </button>
+              );
+            })}
           </div>
         </div>
 
         <div className="available_times">
           <span>Horários disponíveis</span>
           <div>
-            {availableTimes.map((time, index) => (
-              <button key={index} onClick={() => handleTimeClick(time)}>
-                {time}
-              </button>
-            ))}
+            {availableTimes.length > 0 ? (
+              availableTimes.map((time, index) => (
+                <button key={index} onClick={() => handleTimeClick(time)}>
+                  {time}
+                </button>
+              ))
+            ) : (
+              <p>Nenhum horário disponível.</p>
+            )}
           </div>
         </div>
       </div>

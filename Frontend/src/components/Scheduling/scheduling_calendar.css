@@ -12,7 +12,7 @@
 
 .datepicker {
   width: 95%;
-  max-width: 350px;
+  max-width: 470px;
   background-color: var(--c-bg-tertiary);
   border-radius: 8px; /* Suaviza o arredondamento dos cantos */
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Ajusta a sombra para um efeito mais suave */
@@ -106,4 +106,8 @@
   color: #fff;
   background-color: var(--c-theme-primary);
   border-color: var(--c-theme-primary);
+}
+.highlighted-day {
+  background-color: yellow; /* Cor de destaque */
+  color: black; /* Cor do texto */
 }
